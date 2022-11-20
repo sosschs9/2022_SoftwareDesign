@@ -27,21 +27,13 @@ class User:
     self.password = pw
     self.phoneNumber = pn
   def login(self, id, pw):
-    
-    
-    return self.id
+    pass
   def addMyPost(self, idx):
     self.myPost.append(idx)
-    
-    return self.id
   def addMyComment(self, idx):
-    
-    
-    return self.id
+    pass  
   def addMyRequest(self, idx):
     self.myRequestHistory.append(idx)
-    
-    return self.id
   
   
 class Helper(User):
