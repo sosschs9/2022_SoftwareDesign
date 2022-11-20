@@ -18,9 +18,12 @@ class Matching:
         return self.helpeeInfo
 
 
+
 class Accompany(Matching):
-    def __init__:
-        self.helptype = 1
+    helptype = 1
+    def __init__(self, reason, hospitalLocation):
+        self.reason = reason
+        self.hospitalLocation = hospitalLocation
     
     def getReason(self):
         return self.reason
@@ -31,16 +34,18 @@ class Accompany(Matching):
 
 
 class Counsel(Matching):
-    def __init__:
-        self.helptype = 2
+    helptype = 2
+    def __init__(self):
+        self.category = category
     
     def getCategory(self):
         return self.category
     
     
 class SafetyCheck(Matching):
-    def __init__:
-        self.helptype = 4
+    helptype = 4
+    def __init__(self, checkpart):
+        self.checkpart = checkpart
     
     def getCheckPart(self):
         return self.checkpart
