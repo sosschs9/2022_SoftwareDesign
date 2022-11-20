@@ -14,10 +14,12 @@ class Matching:
         return self.address
 
     def getHelperInfo(self):
-        return self.helperInfo
+        self.helperInfo = User.getUserInfo(helper)
+        return helperInfo
     
     def getHelpeeInfo(self):
-        return self.helpeeInfo
+        self.helpeeInfo = User.getUserInfo(helpee)
+        return helpeeInfo
 
     def getMatchingIdx(self):
         return self.matchingIdx
