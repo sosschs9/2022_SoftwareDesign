@@ -64,17 +64,20 @@ class SafetyCheck(Matching):
     def getCheckPart(self):
         return self.checkpart
 
-m = Matching("date", "address")
-print(type(m))
-print("address: " + m.getAddress() + " date: " + m.getDate())
 
-a = Accompany("date", "address", "aaa", "hospital address")
-print("matching idx =", Matching.getMatchingIdx(Matching))
+if __name__=="__main__":
 
-b = Counsel("date", "address", "aaa")
-print("matching idx =", Matching.getMatchingIdx(Matching))
+    m = Matching("date", "address")
+    print(type(m))
+    print("address: " + m.getAddress() + " date: " + m.getDate())
 
-c = SafetyCheck("date", "address", "aaa")
-print("matching idx =", Matching.getMatchingIdx(Matching))
+    a = Accompany("date", "address", "aaa", "hospital address")
+    print("matching idx =", Matching.getMatchingIdx(Matching))
 
-print("a matching idx =", a.getMatchingIdx())
+    b = Counsel("date", "address", "aaa")
+    print("matching idx =", Matching.getMatchingIdx(Matching))
+
+    c = SafetyCheck("date", "address", "aaa")
+    print("matching idx =", Matching.getMatchingIdx(Matching))
+
+    print("a matching idx =", a.getMatchingIdx())
