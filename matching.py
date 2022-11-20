@@ -49,3 +49,7 @@ class SafetyCheck(Matching):
     
     def getCheckPart(self):
         return self.checkpart
+
+m = Matching("date", "address")
+print(type(m))
+print("address: " + m.getAddress() + " date: " + m.getDate())
