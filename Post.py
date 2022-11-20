@@ -8,15 +8,23 @@ class Post:
         self.commentCnt = commentCnt
     
     def Modify(title, content, location, pay):
-        
+        self.title = title
+        self.content = content
+        self.location = location
+        self.pay = pay
 
     def Delete():
+        
 
     def getLocation():
+        return self.location
 
     def getPay():
+        return self.pay
 
     def getTitle():
+        return self.title
 
     def getCommentCnt():
+        return self.commentCnt
 
