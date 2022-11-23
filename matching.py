@@ -100,7 +100,7 @@ class SafetyCheck(Matching):
     def getMatchingIdx(self):
         return self.__matchingIdx
 
-
+'''
 if __name__=="__main__":
 
     m = Matching("date", "address")
@@ -124,3 +124,4 @@ if __name__=="__main__":
     print("b matching idx =", b.getMatchingIdx())
     print("c matching idx =", c.getMatchingIdx())
     print("d matching idx =", d.getMatchingIdx())
+'''
