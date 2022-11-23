@@ -1,28 +1,31 @@
 class Matching:
     """Super Class"""
-    matchingSuccess = False
-    matchingIdx = 0
+    __matchingSuccess = False
+    __matchingIdx = 0
 
     def __init__(self, date, address):
-        self.date = date
-        self.address = address
+        self.__date = date
+        self.__address = address
 
     def getDate(self):
-        return self.date
+        return self.__date
 
     def getAddress(self):
-        return self.address
+        return self.__address
 
     def getHelperInfo(self):
-        self.helperInfo = User.getUserInfo(helper)
-        return helperInfo
+        self.__helperInfo = User.getUserInfo(helper)
+        return self.__helperInfo
     
     def getHelpeeInfo(self):
-        self.helpeeInfo = User.getUserInfo(helpee)
-        return helpeeInfo
+        self.__helpeeInfo = User.getUserInfo(helpee)
+        return self.__helpeeInfo
 
     def getMatchingIdx(self):
-        return self.matchingIdx
+        return self.__matchingIdx
+
+    def countMatching(self):
+        self.__matchingIdx = self.__matchingIdx + 1
 
     #def requireMatching(self):
 
@@ -30,41 +33,72 @@ class Matching:
 
 
 class Accompany(Matching):
-    helptype = 1
     def __init__(self, date, address, reason, hospitalLocation):
-        self.reason = reason
-        self.hospitalLocation = hospitalLocation
-        Matching.matchingIdx += 1
-        self.matchingIdx = Matching.matchingIdx
+        self.__date = date
+        self.__address = address
+        self.__reason = reason
+        self.__hospitalLocation = hospitalLocation
+        
+        Matching.countMatching(Matching)
+        self.__matchingIdx = super().getMatchingIdx()
     
+    def getDate(self):
+        return self.__date
+
+    def getAddress(self):
+        return self.__address
+
     def getReason(self):
-        return self.reason
+        return self.__reason
 
     def getHospitalLocation(self):
-        return self.hospitalLocation
+        return self.__hospitalLocation
     
+    def getMatchingIdx(self):
+        return self.__matchingIdx
 
 
 class Counsel(Matching):
-    helptype = 2
     def __init__(self, date, address, category):
-        self.category = category
-        Matching.matchingIdx += 1
-        self.matchingIdx = Matching.matchingIdx
+        self.__date = date
+        self.__address = address
+        self.__category = category
+
+        Matching.countMatching(Matching)
+        self.__matchingIdx = super().getMatchingIdx()
+    
+    def getDate(self):
+        return self.__date
+
+    def getAddress(self):
+        return self.__address
     
     def getCategory(self):
-        return self.category
-    
+        return self.__category
+
+    def getMatchingIdx(self):
+        return self.__matchingIdx
     
 class SafetyCheck(Matching):
-    helptype = 4
     def __init__(self, date, address, checkpart):
-        self.checkpart = checkpart
-        Matching.matchingIdx += 1
-        self.matchingIdx = Matching.matchingIdx
+        self.__date = date
+        self.__address = address
+        self.__checkpart = checkpart
+        
+        Matching.countMatching(Matching)
+        self.__matchingIdx = super().getMatchingIdx()
+    
+    def getDate(self):
+        return self.__date
+
+    def getAddress(self):
+        return self.__address
     
     def getCheckPart(self):
-        return self.checkpart
+        return self.__checkpart
+
+    def getMatchingIdx(self):
+        return self.__matchingIdx
 
 
 if __name__=="__main__":
@@ -74,12 +108,19 @@ if __name__=="__main__":
     print("address: " + m.getAddress() + " date: " + m.getDate())
 
     a = Accompany("date", "address", "aaa", "hospital address")
-    print("matching idx =", Matching.getMatchingIdx(Matching))
+    print("now matching idx =", Matching.getMatchingIdx(Matching))
+    print("address: " + a.getAddress() + " date: " + a.getDate())
 
     b = Counsel("date", "address", "aaa")
-    print("matching idx =", Matching.getMatchingIdx(Matching))
+    print("now matching idx =", Matching.getMatchingIdx(Matching))
 
     c = SafetyCheck("date", "address", "aaa")
-    print("matching idx =", Matching.getMatchingIdx(Matching))
+    print("now matching idx =", Matching.getMatchingIdx(Matching))
+
+    d = Accompany("date", "address", "aaa", "hospital address")
+    print("now matching idx =", Matching.getMatchingIdx(Matching))
 
     print("a matching idx =", a.getMatchingIdx())
+    print("b matching idx =", b.getMatchingIdx())
+    print("c matching idx =", c.getMatchingIdx())
+    print("d matching idx =", d.getMatchingIdx())
