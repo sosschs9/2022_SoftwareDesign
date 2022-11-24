@@ -102,7 +102,10 @@ class Post(Writing):
 A = Post(1, "20221124", "aaa", 2, "title", "location", "address", 10000)
 A.createComment(10, "20221125", "bbbbb")
 A.createComment(20, "20221126", "ccccc")
+A.createComment(30, "20221127", "ddddd")
 print(A.getCommentCnt())
+print(globals()['comment_{}'.format(1)])
+A.commentList.remove(globals()['comment_{}'.format(1)])
 print(A.commentList[0].getDate())
 print(A.commentList[1].getWriterID())
 """
