@@ -116,31 +116,3 @@ class SafetyCheck(Matching):
     def requireMatching(self):
         if self.__name__ in super().getHelperType:
             super().__matchingSuccess = True
-
-'''
-if __name__=="__main__":
-
-    m = Matching("date", "address")
-    print(type(m))
-    print("address: " + m.getAddress() + " date: " + m.getDate())
-
-    a = Accompany("date", "address", "aaa", "hospital address")
-    print("now matching idx =", Matching.getMatchingIdx(Matching))
-    print("address: " + a.getAddress() + " date: " + a.getDate())
-
-    b = Counsel("date", "address", "aaa")
-    print("now matching idx =", Matching.getMatchingIdx(Matching))
-
-    c = SafetyCheck("date", "address", "aaa")
-    print("now matching idx =", Matching.getMatchingIdx(Matching))
-
-    d = Accompany("date", "address", "aaa", "hospital address")
-    print("now matching idx =", Matching.getMatchingIdx(Matching))
-
-    print("a matching idx =", a.getMatchingIdx())
-    print("b matching idx =", b.getMatchingIdx())
-    print("c matching idx =", c.getMatchingIdx())
-    print("d matching idx =", d.getMatchingIdx())
-
-    print(type(a).__name__ == 'Accompany')
-'''
