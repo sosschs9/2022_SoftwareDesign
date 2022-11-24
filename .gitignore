@@ -5,3 +5,5 @@ test*
 user.py
 
 Post.py
+
+__pycache__/
