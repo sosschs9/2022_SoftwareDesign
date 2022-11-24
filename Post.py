@@ -30,7 +30,7 @@ class Post(Writing):
 #    __commentCnt = 0
     """ commentIdx : 댓글 번호"""
     __commentIdx = 0
-    commentList = []
+    __commentList = []
 
     def __init__(self, writerID, date, contents, postIdx, title, location, detailAddress, pay):
         self.__writerID = writerID
@@ -41,6 +41,7 @@ class Post(Writing):
         self.__location = location
         self.__detailAddress = detailAddress
         self.__pay = pay
+        self.__commentList = []
     
 
     """ Post안에 Comment가 있으므로 """
@@ -69,7 +70,7 @@ class Post(Writing):
     def createComment(self, commentWriterID, commentDate, commentContents):
         self.__commentIdx += 1
         globals()['comment_{0}'.format(self.__commentIdx)] = Post.Comment(commentWriterID, commentDate, commentContents, self.__commentIdx)
-        self.commentList.append(globals()['comment_{0}'.format(self.__commentIdx)])
+        self.__commentList.append(globals()['comment_{0}'.format(self.__commentIdx)])
 
     def modify(self, title, content, location, pay):
         self.__title = title
@@ -96,7 +97,7 @@ class Post(Writing):
         return self.__title
 
     def getCommentCnt(self):
-        return len(self.commentList)
+        return len(self.__commentList)
 
 """    
 A = Post(1, "20221124", "aaa", 2, "title", "location", "address", 10000)
@@ -109,3 +110,13 @@ A.commentList.remove(globals()['comment_{}'.format(1)])
 print(A.commentList[0].getDate())
 print(A.commentList[1].getWriterID())
 """
+
+A = Post(1, "20221124", "aaa", 2, "title", "location", "address", 10000)
+A.createComment(10, "20221125", "bbbbb")
+A.createComment(20, "20221126", "ccccc")
+A.createComment(30, "20221127", "ddddd")
+B = Post(2, "20191124", "AAA", 3, "title2", "location2", "address2", 20000)
+B.createComment(100, "20191125", "BBBBB")
+print(A.getCommentCnt())
+print(B.getCommentCnt())
+print(globals()['comment_{}'.format(1)])
