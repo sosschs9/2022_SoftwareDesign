@@ -27,9 +27,11 @@ class Matching:
     def countMatching(self):
         self.__matchingIdx = self.__matchingIdx + 1
 
-    #def requireMatching(self):
+    def requireMatching(self):
+        pass
 
-
+    # dm layer 정리 후 추가 예정
+    #def delete():
 
 
 class Accompany(Matching):
@@ -56,6 +58,11 @@ class Accompany(Matching):
     
     def getMatchingIdx(self):
         return self.__matchingIdx
+    
+    # need modify
+    def requireMatching(self):
+        if self.__name__ in super().getHelperType:
+            super().__matchingSuccess = True
 
 
 class Counsel(Matching):
@@ -78,6 +85,11 @@ class Counsel(Matching):
 
     def getMatchingIdx(self):
         return self.__matchingIdx
+
+    # need modify
+    def requireMatching(self):
+        if self.__name__ in super().getHelperType:
+            super().__matchingSuccess = True
     
 class SafetyCheck(Matching):
     def __init__(self, date, address, checkpart):
@@ -99,6 +111,11 @@ class SafetyCheck(Matching):
 
     def getMatchingIdx(self):
         return self.__matchingIdx
+
+    # need modify
+    def requireMatching(self):
+        if self.__name__ in super().getHelperType:
+            super().__matchingSuccess = True
 
 '''
 if __name__=="__main__":
@@ -124,4 +141,6 @@ if __name__=="__main__":
     print("b matching idx =", b.getMatchingIdx())
     print("c matching idx =", c.getMatchingIdx())
     print("d matching idx =", d.getMatchingIdx())
+
+    print(type(a).__name__ == 'Accompany')
 '''
