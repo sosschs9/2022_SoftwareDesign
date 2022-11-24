@@ -1,11 +1,12 @@
 from abc import *
 
+"""abstract class"""
 class Writing(metaclass=ABCMeta):
     @abstractmethod
     def __init__(self, writerID, date, contents):
-        self.writerID = writerID
-        self.date = date
-        self.contents = contents
+        self.__writerID = writerID
+        self.__date = date
+        self.__contents = contents
     
 #    @abstractmethod
 #    def delete(self):
@@ -24,63 +25,84 @@ class Writing(metaclass=ABCMeta):
         pass
 
 
+
 class Post(Writing):
-    def __init__(self, writerID, date, contents, postIdx, title, location, detailAddress, pay, commentCnt):
-        self.writerID = writerID
-        self.date = date
-        self.contents = contents
-        self.postIdx = postIdx
-        self.title = title
-        self.location = location
-        self.detailAddress = detailAddress
-        self.pay = pay
-        self.commentCnt = commentCnt
+#    __commentCnt = 0
+    """ commentIdx : 댓글 번호"""
+    __commentIdx = 0
+    commentList = []
+
+    def __init__(self, writerID, date, contents, postIdx, title, location, detailAddress, pay):
+        self.__writerID = writerID
+        self.__date = date
+        self.__contents = contents
+        self.__postIdx = postIdx
+        self.__title = title
+        self.__location = location
+        self.__detailAddress = detailAddress
+        self.__pay = pay
     
+
+    """ Post안에 Comment가 있으므로 """
+    class Comment(Writing):
+        def __init__(self, writerID, date, contents, commentIdx):
+            self.__writerID = writerID
+            self.__date = date
+            self.__contents = contents
+            self.__commentIdx = commentIdx
+
+    #    def delete():
+    #        pass
+
+        def modify(self, contents):
+            self.__contents = contents
+        
+        def getDate(self):
+            return self.__date
+        
+        def getWriterID(self):
+            return self.__writerID
+        
+        def getComment(self):
+            return self.__contents
+
+    def createComment(self, commentWriterID, commentDate, commentContents):
+        self.__commentIdx += 1
+        globals()['comment_{0}'.format(self.__commentIdx)] = Post.Comment(commentWriterID, commentDate, commentContents, self.__commentIdx)
+        self.commentList.append(globals()['comment_{0}'.format(self.__commentIdx)])
+
     def modify(self, title, content, location, pay):
-        self.title = title
-        self.content = content
-        self.location = location
-        self.pay = pay
+        self.__title = title
+        self.__content = content
+        self.__location = location
+        self.__pay = pay
 
 #    def delete():
 #        pass
 
     def getDate(self):
-        return self.date
+        return self.__date
 
     def getWriterID(self):
-        return self.writerID
+        return self.__writerID
 
     def getLocation(self):
-        return self.location
+        return self.__location
 
     def getPay(self):
-        return self.pay
+        return self.__pay
 
     def getTitle(self):
-        return self.title
+        return self.__title
 
     def getCommentCnt(self):
-        return self.commentCnt
+        return len(self.commentList)
 
-class Comment(Writing):
-    def __init__(self, writerID, date, contents, commentIdx):
-        self.writerID = writerID
-        self.date = date
-        self.contents = contents
-        self.commentIdx = commentIdx
-
-#    def delete():
-#        pass
-
-    def modify(self, contents):
-        self.contents = contents
-    
-    def getDate(self):
-        return self.date
-    
-    def getWriterID(self):
-        return self.writerID
-    
-    def getComment(self):
-        return self.contents
+"""    
+A = Post(1, "20221124", "aaa", 2, "title", "location", "address", 10000)
+A.createComment(10, "20221125", "bbbbb")
+A.createComment(20, "20221126", "ccccc")
+print(A.getCommentCnt())
+print(A.commentList[0].getDate())
+print(A.commentList[1].getWriterID())
+"""
