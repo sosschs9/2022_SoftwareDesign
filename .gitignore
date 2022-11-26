@@ -7,3 +7,5 @@ user.py
 Post.py
 
 __pycache__/
+
+config.py
