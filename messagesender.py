@@ -3,11 +3,6 @@ import matching
 from twilio.rest import Client
 
 class MessageSender:
-    
-    def __init__(self, phoneNumber):
-        self.__phoneNumber = phoneNumber
-
-
     def sendMatching(matching):
         account_sid = config.twilio_account_sid
         auth_token = config.twilio_auth_token
