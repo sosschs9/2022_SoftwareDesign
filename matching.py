@@ -93,6 +93,7 @@ class Counsel(Matching):
             super().__matchingSuccess = True
             MessageSender.sendMatching(self)
             MessageSender.sendMatching(self, helper.getUserInfo(), helpee.getUserInfo(), "심리 상담")
+            MessageSender.sendAppointment(self, helper.getUserInfo(), helpee.getUserInfo(), "심리 상담")
     
 class SafetyCheck(Matching):
     def __init__(self, date, address, checkpart):
@@ -119,5 +120,5 @@ class SafetyCheck(Matching):
     def requireMatching(self):
         if self.__name__ in super().getHelperType:
             super().__matchingSuccess = True
-            MessageSender.sendMatching(self)
             MessageSender.sendMatching(self, helper.getUserInfo(), helpee.getUserInfo(), "안전 점검")
+            MessageSender.sendAppointment(self, helper.getUserInfo(), helpee.getUserInfo(), "안전 점검")
