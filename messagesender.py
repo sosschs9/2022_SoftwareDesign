@@ -1,6 +1,7 @@
 import config
 import matching
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
+from pytz import timezone
 from twilio.rest import Client
 
 class MessageSender:
@@ -78,8 +79,9 @@ class MessageSender:
         )
 
     def sendAppointment(matching, helperInfo, helpeeInfo, helptype):
+        KST = timezone('Asia/Seoul')
         period = timedelta(weeks=3)
-        if date.today() == datetime.datetime.strptime(matching.getDate(), '%Y년 %m월 %d일 %H:%M').date() + period :
+        if datetime.now(KST).date() == datetime.datetime.strptime(matching.getDate(), '%Y년 %m월 %d일 %H:%M').date() + period :
             account_sid = config.twilio_account_sid
             auth_token = config.twilio_auth_token
             client = Client(account_sid, auth_token)
@@ -95,4 +97,4 @@ class MessageSender:
                 from_ = config.twilio_from_number,
                 body = to_helper_message
             )
-        else pass
+        else: pass
