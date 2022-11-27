@@ -91,7 +91,6 @@ class Counsel(Matching):
     def requireMatching(self):
         if self.__name__ in super().getHelperType:
             super().__matchingSuccess = True
-            MessageSender.sendMatching(self)
             MessageSender.sendMatching(self, helper.getUserInfo(), helpee.getUserInfo(), "심리 상담")
             MessageSender.sendAppointment(self, helper.getUserInfo(), helpee.getUserInfo(), "심리 상담")
     
