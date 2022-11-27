@@ -63,6 +63,7 @@ class Accompany(Matching):
     def requireMatching(self):
         if self.__name__ in super().getHelperType:
             super().__matchingSuccess = True
+            MessageSender.sendMatching(self)
 
 
 class Counsel(Matching):
@@ -90,6 +91,7 @@ class Counsel(Matching):
     def requireMatching(self):
         if self.__name__ in super().getHelperType:
             super().__matchingSuccess = True
+            MessageSender.sendMatching(self)
     
 class SafetyCheck(Matching):
     def __init__(self, date, address, checkpart):
@@ -116,3 +118,4 @@ class SafetyCheck(Matching):
     def requireMatching(self):
         if self.__name__ in super().getHelperType:
             super().__matchingSuccess = True
+            MessageSender.sendMatching(self)
