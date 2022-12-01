@@ -186,6 +186,8 @@ def getUserPostList(postNumList:list):
 # 의뢰 게시판 글 목록 가져오기 >> getAllPostList(pageNumber:int)
 # 사용자 게시판 작성 글 목록 가져오기 >> getUserPostList(postNumList:list)
 
+# 글 불러오기 >> getPost(postIdx:int) ** return:Post
+
 # 새로운 글 생성 :: 작성자ID, 제목, 내용, 요청날짜, Address, 보수
 def createPost(writerID:str, title:str, contents:str, reqDate:str, addr:Address, pay:str):
     writeDate = getNowTime()
@@ -195,7 +197,7 @@ def createPost(writerID:str, title:str, contents:str, reqDate:str, addr:Address,
 
 # 글 삭제 >> deletePost(postNumber:int)
 
-# 글 수정 :: 글 번호, 제목, 내용, 요청날짜, Address, 보수
+# 글 수정 :: 글번호, 제목, 내용, 요청날짜, Address, 보수
 def modifyPost(postIdx:int, title:str, contents:str, reqDate:str, addr:Address, pay:str):
     post = getPost(postIdx)
     post.modify(title, contents, reqDate, addr, pay)
