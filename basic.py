@@ -1,4 +1,5 @@
 import requests
+import datetime
 
 service_key = 'devU01TX0FVVEgyMDIyMTEyNjExNDQxMzExMzI2MTA='
 
@@ -15,3 +16,7 @@ class Address:
 # 주소 받아오기 / ret: Address
 def getAddress():
     pass
+
+# 현재 시간 > str / ret:str
+def getNowTime():
+    return datetime.datetime.now().strftime('%y.%m.%d')
