@@ -4,8 +4,8 @@
 		<title>SoftwareDesign_10조</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="../assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="../assets/css/noscript.css" /></noscript>
+		<link rel="stylesheet" href="../../static/assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="../../static/assets/css/noscript.css" /></noscript>
 	</head>
 	<body class="is-preload">
 		<!-- Wrapper -->
@@ -14,7 +14,7 @@
 					<header id="header">
 						<div class="inner">
 							<!-- Logo -->
-								<a href="main.html" class="logo">
+								<a href="/" class="logo">
 									<span class="symbol"></span><span class="title">해줌 (help zoom)</span>
 								</a>
 							<!-- Nav -->
@@ -29,11 +29,11 @@
 					<nav id="menu">
 						<h2>Menu</h2>
 						<ul>
-							<li><a href="main.html">홈</a></li>
-							<li><a href="main.html">마이페이지</a></li>
-							<li><a href="postBoard.html">의뢰게시판</a></li>
-							<li><a href="newMatching.html">도우미 신청</a></li>
-							<li><a href="matchingBoard.html">도우미 요청 목록</a></li>
+							<li><a href="/">홈</a></li>
+							<li><a href="/">마이페이지</a></li>
+							<li><a href="/post_board">의뢰게시판</a></li>
+							<li><a href="/select_helper">도우미 신청</a></li>
+							<li><a href="/matching_board">도우미 요청 목록</a></li>
 						</ul>
 					</nav>
                 <!-- Main -->
@@ -41,35 +41,37 @@
 						<div class="inner">
 							<!-- Form -->
 								<section>
-                                    <h1>안전점검 도우미 신청</h1>
-                                    <p>도우미 신청을 위해서는 아래에 해당하는 내용을 모두 기입하셔야 합니다.</p>
-									<form method="post" action="#">
-										<div class="row gtr-uniform">
-                                            <div class="col-12-xsmall">
-                                                <label style="font-size: 1rem;font-weight: 200;">날짜:
-                                                    <input type="date" name="demo-date" id="demo-date" max="2024-12-31" min="2022-11-01" value="2022-11-21"/>
-                                                </label>
-											</div>
- 											<div class="col-6 col-12-xsmall">
-                                                <label style="font-size: 1rem;font-weight: 200;">방문 시간:
-                                                    <input type="time" name="demo-time" id="demo-time" value=""/>
-                                                </label>
-											</div>
-                                            <div class="col-6 col-12-xsmall">
-												<input type="text" name="demo-reason" id="demo-reason" value="" placeholder="점검이 필요한 부분 "/>
-											</div>
-											<div class="col-6 col-12">
-												<input type="text" name="demo-location" id="demo-location" value="" placeholder="점검 장소 " />
-											</div>
+                                    <h1>{{ post['title'] }}</h1>
+                                    <p>작성자: {{ post['writer'] }}작성일자: {{ post['creation'] }}</p>
 
-                                            <div class="col-12">
-												<ul class="actions">
-													<li><input type="submit" value="도우미 신청" class="primary" /></li>
-													<li><input type="reset" value="초기화" /></li>
-												</ul>
-											</div>
-                                        </div>
-                                    </form>
+                                    <h2>의뢰 내용</h2>
+                                    <p>{내}</p>
+                                    <hr>
+
+									<div class="row">
+										<div class="col-6 col-12-medium">
+											<h2>위치</h2>
+                                    		<p>어쩌구 저쩌구</p>
+											<hr>
+
+											<h2>연락방법</h2>
+                                    		<p>나는 말하는 감자입니다.</p>
+                                    		<hr>
+										</div>
+										<div class="col-6 col-12-medium">
+                                    		<h2>날짜/시간</h2>
+                                    		<p>나는 말하는 감자입니다.</p>
+                                    		<hr>
+
+											<h2>보수</h2>
+                                    		<p>나는 말하는 감자입니다.</p>
+                                    		<hr>
+										</div>
+									</div>
+
+									<div>
+										<a href="javascript:window.history.back();" class="button" style="float: right;">되돌아가기</a>
+									</div>
                                 </section>
                         </div>
                     </div>

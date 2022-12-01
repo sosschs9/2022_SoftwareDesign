@@ -10,26 +10,21 @@
 	<body class="is-preload">
 		<!-- Wrapper -->
 			<div id="wrapper">
-
 				<!-- Header -->
 					<header id="header">
 						<div class="inner">
-
 							<!-- Logo -->
 								<a href="/" class="logo">
-									<span class="symbol"></span><span class="title">10조 OPP Service</span>
+									<span class="symbol"></span><span class="title">해줌 (help zoom)</span>
 								</a>
-
 							<!-- Nav -->
 								<nav>
 									<ul>
 										<li><a href="#menu">Menu</a></li>
 									</ul>
 								</nav>
-
-						</div>
-					</header>
-
+                        </div>
+                    </header>
 				<!-- Menu -->
 					<nav id="menu">
 						<h2>Menu</h2>
@@ -41,55 +36,39 @@
 							<li><a href="/matching_board">도우미 요청 목록</a></li>
 						</ul>
 					</nav>
-
-				<!-- Main -->
-					<div id="main">
+                <!-- Main -->
+                    <div id="main">
 						<div class="inner">
-							<header>
-								<h1>해줌 (help zoom)</h1>
-								<p>해줌은 혼자서 해결하기 힘든 부분이나 전문가의 손길이 필요한 부분을 도와줄 수 있는 1인 가구 맞춤형 서비스입니다. <br/>
-									사소한 도움이 필요한 경우 이웃끼리 서로 도와주기 위해 의뢰 게시글을 작성할 수 있고, <br/>
-									전문가의 도움이 필요한 경우 사이트에서 승인을 받은 전문 도우미와 신청자를 1:1로 매칭해주는 기능을 제공합니다.</p>
-							</header>
-							<section class="tiles">
-								<article class="style1">
-									<span class="image">
-										<img src="../static/images/pic01.jpg" alt="" />
-									</span>
-									<a href="/post_board">
-										<h2>의뢰 게시판</h2>
-										<div class="content">
-											<p>의뢰 게시판을 통해 주변 이웃들에게 도움의 손길을 건내주세요.<br/> * 해당 페이지에서 의뢰 게시글을 작성할 수 있습니다.</p>
-										</div>
-									</a>
-								</article>
-								<article class="style2">
-									<span class="image">
-										<img src="../static/images/pic02.jpg" alt="" />
-									</span>
-									<a href="/select_helper">
-										<h2>도우미 요청</h2>
-										<div class="content">
-											<p>병원동행, 심리상담, 안전점검이 필요한 경우 해당 페이지에서 전문 도우미를 요청할 수 있습니다.</p>
-										</div>
-									</a>
-								</article>
-								<article class="style3">
-									<span class="image">
-										<img src="../static/images/pic03.jpg" alt="" />
-									</span>
-									<a href="/matching_board">
-										<h2>도우미 요청 목록</h2>
-										<div class="content">
-											<p>도우미 요청 목록을 확인하고 원하는 매칭을 진행할 수 있습니다. <br/> * 해당 페이지는 도우미 전용 페이지입니다. 일반 사용자는 도우미 요청 카테고리를 선택해주세요. </p>
-										</div>
-									</a>
-								</article>
-							</section>
-						</div>
-					</div>
+							<!-- Form -->
+								<section>
+                                    <h1>도우미 신청 확인</h1>
+                                    <p>{{ check['name'] }}님이 신청하신 도우미 요청입니다. <br/>
+										내용 확인 후, 완료버튼을 누르면 신청이 완료됩니다.
+									</p>
 
-				<!-- Footer -->
+                                    <h2>도우미 유형</h2>
+                                    <p>{{ check['helperType'] }}</p>
+                                    <hr>
+
+                                    <h2>날짜/시간</h2>
+                                    <p>{{ check['date'] }}</p>
+                                    <hr>
+
+                                    <h2>상세 내용</h2>
+									{% detail_item in check['detail'] %}
+                                    <p>{{ detail_item }}</p>
+									{% endfor %}
+                                    <hr>
+
+                                    <ul class="actions">
+                                        <li><a href="{{ url_for('request_matching', ), }}" class="button primary">완료</a></li>
+                                        <li><a href="/" class="button">신청 취소</a></li>
+                                    </ul>
+                                </section>
+                        </div>
+                    </div>
+
+                <!-- Footer -->
 					<footer id="footer">
 						<div class="inner">
                             <section>
@@ -111,15 +90,26 @@
                             </section>
 						</div>
 					</footer>
-
 			</div>
 
 		<!-- Scripts -->
+			{% block script %}
+			<script type='text/javascript'>
+			const delete_elements = document.getElementsByClassName("delete");
+			Array.from(delete_elements).forEach(function(element) {
+				element.addEventListener('click', function() {
+					if(confirm("정말로 삭제하시겠습니까?")) {
+						location.href = this.dataset.uri;
+					};
+				});
+			});
+			</script>
+			{% endblock %}
 			<script src="../static/assets/js/jquery.min.js"></script>
 			<script src="../static/assets/js/browser.min.js"></script>
 			<script src="../static/assets/js/breakpoints.min.js"></script>
 			<script src="../static/assets/js/util.js"></script>
 			<script src="../static/assets/js/main.js"></script>
 
-	</body>
+    </body>
 </html>

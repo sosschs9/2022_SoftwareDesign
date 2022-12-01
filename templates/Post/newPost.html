@@ -4,8 +4,8 @@
 		<title>SoftwareDesign_10조</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="../assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="../assets/css/noscript.css" /></noscript>
+		<link rel="stylesheet" href="../../static/assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="../../static/assets/css/noscript.css" /></noscript>
 	</head>
 	<body class="is-preload">
 		<!-- Wrapper -->
@@ -14,7 +14,7 @@
 					<header id="header">
 						<div class="inner">
 							<!-- Logo -->
-								<a href="main.html" class="logo">
+								<a href="/" class="logo">
 									<span class="symbol"></span><span class="title">해줌 (help zoom)</span>
 								</a>
 							<!-- Nav -->
@@ -29,11 +29,11 @@
 					<nav id="menu">
 						<h2>Menu</h2>
 						<ul>
-							<li><a href="main.html">홈</a></li>
-							<li><a href="main.html">마이페이지</a></li>
-							<li><a href="postBoard.html">의뢰게시판</a></li>
-							<li><a href="newMatching.html">도우미 신청</a></li>
-							<li><a href="matchingBoard.html">도우미 요청 목록</a></li>
+							<li><a href="/">홈</a></li>
+							<li><a href="/">마이페이지</a></li>
+							<li><a href="/post_board">의뢰게시판</a></li>
+							<li><a href="/select_helper">도우미 신청</a></li>
+							<li><a href="/matching_board">도우미 요청 목록</a></li>
 						</ul>
 					</nav>
                 <!-- Main -->
@@ -51,37 +51,31 @@
                                             <div class="col-12">
 												<textarea name="demo-message" id="demo-message" placeholder="의뢰 내용 " rows="10"></textarea>
 											</div>
-                                            <div class="col-12-xsmall">
-												<select name="demo-category" id="demo-category">
-													<option value="">- 위치 -</option>
-                                                    <option value="1">서울</option>
-													<option value="2">경기도</option>
-                                                    <option value="3">인천</option>
-													<option value="4">강원도</option>
-													<option value="5">충청북도</option>
-													<option value="6">충청남도</option>
-                                                    <option value="7">경상북도/대구</option>
-                                                    <option value="8">경상남도/부산/울산</option>
-                                                    <option value="9">전라북도</option>
-                                                    <option value="10">전라남도</option>
-                                                    <option value="11">제주도</option>
-                                                    <option value="12">광주/대전은 어디로 하지</option>
-												</select>
-											</div>
 											<div class="col-6 col-12-xsmall">
                                                 <label for="date" style="font-size: 1rem;font-weight: 200;">날짜:
                                                     <input type="date" name="demo-date" id="demo-date" max="2024-12-31" min="2022-11-01" value="2022-11-21"/>
                                                 </label>
 											</div>
+                                            <div class="col-12-xsmall">
+												<input type="text" name="sido" id="sido" placeholder="도/시" readonly/>
+											</div>
+											<div class="col-12-xsmall">
+												<input type="button" onclick="execDaumPostcode()" value="주소 찾기">
+											</div>
+											<div class="col-6 col-12-xsmall">
+												<input type="text" name="address" id="address" placeholder="주소" readonly/>
+											</div>
+
                                             <div class="col-6 col-12">
-												<input type="text" name="demo-address" id="demo-address" value="" placeholder="상세주소 " />
+												<input type="text" name="detailAddress" id="detailAddress" value="" placeholder="상세주소 " />
 											</div>
                                             <div class="col-6 col-12-xsmall">
-												<input type="text" name="demo-contact" id="demo-contact" value="" placeholder="연락방법 " />
+												<input type="text" name="contact" id="contact" value="" placeholder="연락방법 " />
 											</div>
                                             <div class="col-6 col-12-xsmall">
-												<input type="text" name="demo-price" id="demo-price" value="" placeholder="보수 " />
+												<input type="text" name="pay" id="pay" value="" placeholder="보수 " />
 											</div>
+
                                             <div class="col-12">
 												<ul class="actions">
 													<li><input type="submit" value="게시글 업로드" class="primary" /></li>
@@ -90,6 +84,9 @@
 											</div>
                                         </div>
                                     </form>
+									<div>
+										<a href="javascript:window.history.back();" class="button" style="float: right;">되돌아가기</a>
+									</div>
                                 </section>
                         </div>
                     </div>
@@ -119,11 +116,40 @@
 			</div>
 
 		<!-- Scripts -->
-			<script src="../assets/js/jquery.min.js"></script>
-			<script src="../assets/js/browser.min.js"></script>
-			<script src="../assets/js/breakpoints.min.js"></script>
-			<script src="../assets/js/util.js"></script>
-			<script src="../assets/js/main.js"></script>
+		<script src="../../static/assets/js/jquery.min.js"></script>
+		<script src="../../static/assets/js/browser.min.js"></script>
+		<script src="../../static/assets/js/breakpoints.min.js"></script>
+		<script src="../../static/assets/js/util.js"></script>
+		<script src="../../static/assets/js/main.js"></script>
 
+		<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+		<script>
+        function execDaumPostcode() {
+            // 현재 scroll 위치를 저장해놓는다.
+            var currentScroll = Math.max(document.body.scrollTop, document.documentElement.scrollTop);
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    // 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+                    var addr = ''; // 주소 변수
+                    var sido = ''; // 도/시 변수
+
+                    //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                    if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                        addr = data.roadAddress;
+                    } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                        addr = data.jibunAddress;
+                    }
+                    sido = data.sido;
+
+                    // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                    document.getElementById("address").value = addr;
+                    document.getElementById("sido").value = sido;
+
+                    // 우편번호 찾기 화면이 보이기 이전으로 scroll 위치를 되돌린다.
+                    document.body.scrollTop = currentScroll;
+                }
+            }).open({autoClose: true});
+        }
+    	</script>
     </body>
 </html>
