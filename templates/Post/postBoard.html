@@ -33,7 +33,7 @@
 						<ul>
 							<li><a href="/">홈</a></li>
 							<li><a href="/">마이페이지</a></li>
-							<li><a href="/post_board">의뢰게시판</a></li>
+							<li><a href="/post_board/1">의뢰게시판</a></li>
 							<li><a href="/select_helper">도우미 신청</a></li>
 							<li><a href="/matching_board">도우미 요청 목록</a></li>
 						</ul>
@@ -65,35 +65,43 @@
                                             </tr>
                                         </thead>
                                         <tbody> <!--게시글 목록 받아오기-->
+										{% for post in page_list %}
                                             <tr>
-                                                <td>2</td>
-                                                <td><a href="#">제목입니다2</a></td> <!--게시글 링크 추가-->
-                                                <td>User1</td>
-                                                <td>2022.11.23</td>
+                                                <td>{{ post['postIdx'] }}</td>
+                                                <td><a href="/post/{{ post['postIdx'] }}">{{ post['title'] }}</a></td> <!--게시글 링크 추가-->
+                                                <td>{{ post['writerID'] }}</td>
+                                                <td>{{ post['writeDate'] }}</td>
                                             </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td><a href="#">제목입니다1</a></td>
-                                                <td>User2</td>
-                                                <td>2022.11.22</td>
-                                            </tr>
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <!--필요하면...-->
-                                            </tr>
-                                        </tfoot>
+										{% endfor %}
+										</tbody>
                                     </table>
                                 </div>
-                            </section>
+								<div style="text-align:center;">
+								{% if start - 1 > 0 %}
+									<a href="{{ url_for('post_board', page=start-1) }}" class="button">이전</a>
+									{% endif %}
 
-                            <ul class="actions" style="width: 200px; margin-left: auto; margin-right: auto;">
-                                <li><a href="#" class="button">이전</a></li>
-                                <li><a href="#" class="button">다음</a></li>
-                            </ul>
-							<div>
-								<a href="javascript:window.history.back();" class="button" style="float: right;">되돌아가기</a>
-							</div>
+									{% for pageIdx in range(start, end + 1) %}
+									{% if pageIdx > max_page %}
+									{% else %}
+										{% if pageIdx == this_page %}
+										<b class="button primary">{{ pageIdx }}</b>
+										{% else %}
+										<a href="{{ url_for('post_board', page=pageIdx) }}" class="button">{{ pageIdx }}</a>
+										{% endif %}
+
+									{% endif %}
+								{% endfor %}
+
+								{% if end < max_page %}
+								<a href="{{ url_for('post_board', page=end+1) }}" class="button">다음</a>
+								{% endif %}
+
+								</div>
+								<div>
+									<a href="javascript:window.history.back();" class="button" style="float: right;">되돌아가기</a>
+								</div>
+                            </section>
 						</div>
 					</div>
 

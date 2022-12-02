@@ -1,25 +1,34 @@
+import pymongo
 from abc import *
+from basic import *
+from user import *
 
-"""abstract class"""
+# app.py 작성시 맨 아래쪽의 Method(app.py) 부분 참고
+
+# DB 연결
+client = pymongo.MongoClient("mongodb+srv://SD:1234@cluster0.kkapwcd.mongodb.net/?retryWrites=true&w=majority")
+db = client['2022SoftwareDesign']
+col_post = db['Post']
 
 
+##### PD Layer Class #####
 class Writing(metaclass=ABCMeta):
     @abstractmethod
-    def __init__(self, writerID, date, contents):
+    def __init__(self, writerID, writeDate, contents):
         self.__writerID = writerID
-        self.__date = date
+        self.__writeDate = writeDate
         self.__contents = contents
 
-    #    @abstractmethod
-    #    def delete(self):
-    #        pass
+    @abstractmethod
+    def delete(self):
+        pass
 
     @abstractmethod
     def modify(self):
         pass
 
     @abstractmethod
-    def getDate(self):
+    def getWriteDate(self):
         pass
 
     @abstractmethod
@@ -27,108 +36,277 @@ class Writing(metaclass=ABCMeta):
         pass
 
 
+# Post Class
 class Post(Writing):
-    """ commentIdx : 댓글 번호"""
-    __commentIdx = 0
-    commentList = {}
-
-    def __init__(self, writerID, date, contents, postIdx, title, location, detailAddress, pay):
-        self.__writerID = writerID
-        self.__date = date
-        self.__contents = contents
+    # 초기화: 글번호, 작성시간, 작성자ID, 제목, 내용, 요청날짜, 주소, 보수, 연락방법, 댓글리스트
+    def __init__(self, postIdx: int, writeDate: str, writerID: str, title: str, contents: str, reqDate: str,
+                 addr: Address, pay: str, contact: str, commentList: list):
         self.__postIdx = postIdx
+        self.__writeDate = writeDate
+        self.__writerID = writerID
         self.__title = title
-        self.__location = location
-        self.__detailAddress = detailAddress
-        self.__pay = pay
-        self.commentList = {}
-        self.__commentIdx = 0
-
-    """ Post안에 Comment가 있으므로 """
-
-    class Comment(Writing):
-        def __init__(self, writerID, date, contents, commentIdx):
-            self.__writerID = writerID
-            self.__date = date
-            self.__contents = contents
-            self.__commentIdx = commentIdx
-
-    """ DM Layer 후에 완성"""
-
-    #    def delete():
-    #        pass
-
-    def modify(self, contents):
         self.__contents = contents
+        self.__requestDate = reqDate
+        self.__address = addr
+        self.__pay = pay
+        self.__contact = contact
+        self.commentList = commentList
 
-    def getDate(self):
-        return self.__date
+    # Comment Class
+    class Comment(Writing):
+        # 초기화: 댓글번호, 작성시간, 작성자ID, 내용
+        def __init__(self, commentIdx: int, writeDate: str, writerID: str, contents: str):
+            self.__commentIdx = commentIdx
+            self.__writeDate = writeDate
+            self.__writerID = writerID
+            self.__contents = contents
+
+        # 댓글 수정
+        def modify(self, contents: str):
+            self.__contents = contents
+
+        # 댓글 삭제 ** 해당 Post의 commentList에서 삭제해야함 **
+        def delete(self):
+            pass
+
+        # Comment Getter
+        def getCommentIdx(self):
+            return self.__commentIdx
+
+        def getWriteDate(self):
+            return self.__writeDate
+
+        def getWriterID(self):
+            return self.__writerID
+
+        def getContents(self):
+            return self.__contents
+
+    # 댓글 추가
+    def addComment(self, commentIdx: int, writeDate: str, writerID: str, contents: str):
+        self.commentList.append(Post.Comment(commentIdx, writeDate, writerID, contents))
+
+    # 글 수정
+    def modify(self, title: str, contents: str, reqDate: str, addr: Address, pay: str, contact: str):
+        self.__title = title
+        self.__contents = contents
+        self.__requestDate = reqDate
+        self.__address = addr
+        self.__pay = pay
+        self.__contact = contact
+
+    # 글 삭제
+    def delete(self):
+        deletePost(self.__postIdx)
+
+    # Post Getter
+    def getPostIdx(self):
+        return self.__postIdx
+
+    def getWriteDate(self):
+        return self.__writeDate
 
     def getWriterID(self):
         return self.__writerID
 
-    def getComment(self):
+    def getTitle(self):
+        return self.__title
+
+    def getContents(self):
         return self.__contents
 
-    """
-    def getCommentIdx(self):
-        return self.__commentIdx
-    """
+    def getRequestDate(self):
+        return self.__requestDate
+
+    def getAddress(self):
+        return self.__address
+
+    def getPay(self):
+        return self.__pay
+
+    def getContact(self):
+        return self.__contact
+
+    def getCommentCnt(self):
+        return len(self.commentList)
 
 
-def createComment(self, commentWriterID, commentDate, commentContents):
-    self.__commentIdx += 1
-    self.commentList[self.__commentIdx] = Post.Comment(commentWriterID, commentDate, commentContents, self.__commentIdx)
+##### POST DB #####
+# 새로운 게시글 번호 / ret: int
+def getPostNumber():
+    result = col_post.find().sort('_Post__postIdx', -1).limit(1)
+    for i in result:
+        return i['_Post__postIdx'] + 1
+    return 1
 
 
-def modify(self, title, content, location, pay):
-    self.__title = title
-    self.__content = content
-    self.__location = location
-    self.__pay = pay
+# 게시글 추가
+def DB_addPost(nPost: Post):
+    element = nPost.__dict__
+    element['_Post__address'] = nPost.getAddress().__dict__
+
+    commentList = []
+    for i in nPost.commentList:
+        commentList.append(i.__dict__)
+    element['commentList'] = commentList
+
+    col_post.insert_one(element)
 
 
-""" DM Layer 후에 완성"""
+# 게시글(+댓글) 불러오기 / ret: Post
+def getPost(postIdx: int):
+    result = col_post.find_one({'_Post__postIdx': postIdx})
+
+    temp = result['_Post__address']
+    addr = Address(temp['detailAddress'], temp['placeName'], temp['region'])
+
+    post = Post(result['_Post__postIdx'], result['_Post__writeDate'], result['_Post__writerID'],
+                result['_Post__title'], result['_Post__contents'], result['_Post__requestDate'],
+                addr, result['_Post__pay'], result['_Post__contact'], [])
+
+    for i in result['commentList']:
+        post.addComment(i['_Comment__commentIdx'], i['_Comment__writerID'], i['_Comment__writeDate'],
+                        i['_Comment__contents'])
+
+    return post
 
 
-#    def delete():
-#        pass
-
-def getDate(self):
-    return self.__date
+# 게시글 삭제
+def DB_deletePost(postIdx: int):
+    col_post.delete_one({'_Post__postIdx': postIdx})
 
 
-def getWriterID(self):
-    return self.__writerID
+# 게시글 업데이트
+def DB_updatePost(post: Post):
+    DB_deletePost(post.getPostIdx())
+    DB_addPost(post)
 
 
-def getLocation(self):
-    return self.__location
+# 총 게시글 페이지 수 / ret: int
+def getAllPostPageCount():
+    cnt = col_post.estimated_document_count()
+    if cnt % 20 != 0:
+        return int(cnt / 20) + 1
+    else:
+        return int(cnt / 20)
 
 
-def getPay(self):
-    return self.__pay
+# 게시글 목록 불러오기(페이지 번호별 20개) / ret:list
+# list: {'postIdx':글번호, 'region':지역, 'title':제목, 'writerID':작성자ID, 'writeDate':작성일자}
+def getAllPostList(pageNumber: int):
+    maxIdx = pageNumber * 20
+    result = col_post.find().sort('_Post__postIdx', -1).limit(maxIdx)
+    ret = []
+    cnt = 0
+    for element in result:
+        cnt += 1
+        if cnt <= (pageNumber - 1) * 20:
+            continue
+        else:
+            ret.append({'postIdx': element['_Post__postIdx'], 'title': element['_Post__title'],
+                        'region': element['_Post__address']['region'],
+                        'writerID': element['_Post__writerID'], 'writeDate': element['_Post__writeDate']})
+    return ret
 
 
-def getTitle(self):
-    return self.__title
+# 지역별 게시글 목록 불러오기(페이지 번호별 20개) / ret:list
+# list 형태는 getAllPostList와 같음
+def getRegionPostList(pageNumber: int, region: str):
+    maxIdx = pageNumber * 20
+    postIdx = getPostNumber() - 1
+
+    ret = []
+    postCnt = 0
+    while postIdx > 0 and len(ret) < 20:
+        element = col_post.find_one({'_Post__postIdx': postIdx})
+        postIdx -= 1
+        if element == None:
+            continue
+
+        if element['_Post__address']['region'] == region:
+            postCnt += 1
+            if postCnt <= (pageNumber - 1) * 20:
+                continue
+            else:
+                ret.append({'postIdx': element['_Post__postIdx'], 'title': element['_Post__title'],
+                            'region': element['_Post__address']['region'],
+                            'writerID': element['_Post__writerID'], 'writeDate': element['_Post__writeDate']})
+
+    return ret
 
 
-def getCommentCnt(self):
-    return len(self.commentList)
+# 해당 유저의 게시글 목록 불러오기 / ret: list
+# list 형태는 getAllPostList와 같음
+def getUserPostList(postNumList: list):
+    ret = []
+    for i in postNumList:
+        element = col_post.find_one({'_Post__postIdx': i})
+        ret.append({'postIdx': element['_Post__postIdx'], 'title': element['_Post__title'],
+                    'region': element['_Post__address']['region'],
+                    'writerID': element['_Post__writerID'], 'writeDate': element['_Post__writeDate']})
+    return ret
 
 
-"""
-A = Post(1, "20221124", "aaa", 2, "title", "location", "address", 10000)
-A.createComment(10, "20221125", "bbbbb")
-A.createComment(20, "20221126", "ccccc")
-A.createComment(30, "20221127", "ddddd")
-B = Post(2, "20191124", "AAA", 3, "title2", "location2", "address2", 20000)
-B.createComment(100, "20191125", "BBBBB")
-print(A.getCommentCnt())
-print(B.getCommentCnt())
-A.commentList.pop(1)
-print(A.commentList[2].getDate())
-print(A.commentList[3].getDate())
-print(B.commentList[1].getWriterID())
-"""
+##### Method(app.py) #####
+# 의뢰 게시판 페이지 수 >> getAllPostPageCount()
+# 의뢰 게시판 글 목록(지역설정X) 가져오기 >> getAllPostList(pageNumber:int)
+# 의뢰 게시판 글 목록(지역설정O) 가져오기 >> getRegionPostList(pageNumber:int, region:str)
+# 사용자 게시판 작성 글 목록 가져오기 >> getUserPostList(postNumList:list)
+# Post 불러오기(1개) >> getPost(postIdx)
+
+# 새로운 글 생성 :: 작성자ID, 제목, 내용, 요청날짜, Address, 보수, 연락방법
+def createPost(writerID: str, title: str, contents: str, reqDate: str, addr: Address, pay: str, contact: str):
+    writeDate = getNowTime()
+    postIdx = getPostNumber()
+    nPost = Post(postIdx, writeDate, writerID, title, contents, reqDate, addr, pay, contact, [])
+    DB_addPost(nPost)
+
+    user = DB_getUser(writerID)
+    user.addMyPost(postIdx)
+    DB_updateUser(user)
+
+
+# 글 삭제 :: 글번호
+def deletePost(postIdx: int):
+    post = getPost(postIdx)
+    DB_deletePost(postIdx)
+    user = DB_getUser(post.getWriterID())
+    user.deleteMyPost(postIdx)
+
+
+# 글 수정 :: 글 번호, 제목, 내용, 요청날짜, Address, 보수, 연락방법
+def modifyPost(postIdx: int, title: str, contents: str, reqDate: str, addr: Address, pay: str, contact: str):
+    post = getPost(postIdx)
+    post.modify(title, contents, reqDate, addr, pay, contact)
+    DB_updatePost(post)
+
+
+# 새로운 댓글 생성:: 글번호, 작성자ID, 내용
+def createComment(postIdx: int, writerID: str, contents: str):
+    post = getPost(postIdx)
+    commentIdx = post.getCommentCnt() + 1
+    writeDate = getNowTime()
+    post.addComment(commentIdx, writeDate, writerID, contents)
+    DB_updatePost(post)
+
+
+# 댓글 삭제:: 글번호, 댓글번호
+def deleteComment(postIdx: int, commentIdx: int):
+    post = getPost(postIdx)
+    for comment in post.commentList:
+        if comment.getCommentIdx() == commentIdx:
+            index = post.commentList.index(comment)
+            post.commentList.pop(index)
+            DB_updatePost(post)
+            return
+
+
+# 댓글 수정:: 글번호, 댓글번호, 내용
+def modifyComment(postIdx: int, commentIdx: int, contents: str):
+    post = getPost(postIdx)
+    for comment in post.commentList:
+        if comment.getCommentIdx() == commentIdx:
+            index = post.commentList.index(comment)
+            post.commentList[index].modify(contents)
+            DB_updatePost(post)
+            return

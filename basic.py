@@ -1,6 +1,12 @@
 import requests
+import datetime
 
-service_key = 'devU01TX0FVVEgyMDIyMTEyNjExNDQxMzExMzI2MTA='
+class UserCommonInfo:
+    def __init__(self, id:str, name:str, phoneNumber:str, gender:bool):
+        self.ID = id
+        self.NAME = name
+        self.PHONENUMBER = phoneNumber
+        self.GENDER = gender
 
 class Address:
     detailAddress:str     # 도로명주소 전체
@@ -12,6 +18,6 @@ class Address:
         self.placeName = placeName
         self.region = region
 
-# 주소 받아오기 / ret: Address
-def getAddress():
-    pass
+# 현재 시간 > str / ret:str
+def getNowTime():
+    return datetime.datetime.now().strftime('%y.%m.%d')
