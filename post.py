@@ -1,9 +1,9 @@
 import pymongo
 from abc import *
 from basic import *
+from user import *
 
 # app.py 작성시 맨 아래쪽의 Method(app.py) 부분 참고
-# ** MyPost 추가/삭제 등 User와 관련된 부분은 app.py에 작성
 
 # DB 연결
 client = pymongo.MongoClient("mongodb+srv://SD:1234@cluster0.kkapwcd.mongodb.net/?retryWrites=true&w=majority")
@@ -33,8 +33,8 @@ class Writing(metaclass=ABCMeta):
 
 # Post Class
 class Post(Writing):
-    # 초기화: 글번호, 작성시간, 작성자ID, 제목, 내용, 요청날짜, 주소, 보수, 댓글리스트
-    def __init__(self, postIdx:int, writeDate:str, writerID:str, title:str, contents:str, reqDate:str, addr:Address, pay:str, commentList:list):
+    # 초기화: 글번호, 작성시간, 작성자ID, 제목, 내용, 요청날짜, 주소, 보수, 연락방법, 댓글리스트
+    def __init__(self, postIdx:int, writeDate:str, writerID:str, title:str, contents:str, reqDate:str, addr:Address, pay:str, contact:str, commentList:list):
         self.__postIdx = postIdx
         self.__writeDate = writeDate
         self.__writerID = writerID
@@ -43,6 +43,7 @@ class Post(Writing):
         self.__requestDate = reqDate
         self.__address = addr
         self.__pay = pay
+        self.__contact = contact
         self.commentList = commentList
     
     # Comment Class
@@ -77,12 +78,13 @@ class Post(Writing):
         self.commentList.append(Post.Comment(commentIdx, writeDate, writerID, contents))
 
     # 글 수정
-    def modify(self, title:str, contents:str, reqDate:str, addr:Address, pay):
+    def modify(self, title:str, contents:str, reqDate:str, addr:Address, pay:str, contact:str):
         self.__title = title
         self.__contents = contents
         self.__requestDate = reqDate
         self.__address = addr
         self.__pay = pay
+        self.__contact = contact
 
     # 글 삭제
     def delete(self):
@@ -105,6 +107,8 @@ class Post(Writing):
         return self.__address
     def getPay(self):
         return self.__pay
+    def getContact(self):
+        return self.__contact
 
     def getCommentCnt(self):
         return len(self.commentList)
@@ -119,7 +123,7 @@ def getPostNumber():
     return 1
 
 # 게시글 추가
-def addPost(nPost:Post):
+def DB_addPost(nPost:Post):
     element = nPost.__dict__
     element['_Post__address'] = nPost.getAddress().__dict__
 
@@ -139,7 +143,7 @@ def getPost(postIdx:int):
 
     post = Post(result['_Post__postIdx'], result['_Post__writeDate'], result['_Post__writerID'], 
                 result['_Post__title'], result['_Post__contents'], result['_Post__requestDate'], 
-                addr, result['_Post__pay'], [])
+                addr, result['_Post__pay'], result['_Post__contact'], [])
 
     for i in result['commentList']:
         post.addComment(i['_Comment__commentIdx'], i['_Comment__writerID'], i['_Comment__writeDate'], i['_Comment__contents'])
@@ -147,13 +151,21 @@ def getPost(postIdx:int):
     return post
 
 # 게시글 삭제
-def deletePost(postIdx:int):
+def DB_deletePost(postIdx:int):
     col_post.delete_one({'_Post__postIdx':postIdx})
 
 # 게시글 업데이트
-def updatePost(post:Post):
-    deletePost(post.getPostIdx())
-    addPost(post)
+def DB_updatePost(post:Post):
+    DB_deletePost(post.getPostIdx())
+    DB_addPost(post)
+
+# 총 게시글 페이지 수 / ret: int
+def getAllPostPageCount():
+    cnt = col_post.estimated_document_count()
+    if cnt % 20 != 0:
+        return int(cnt / 20) + 1
+    else:
+        return int(cnt / 20)
 
 # 게시글 목록 불러오기(페이지 번호별 20개) / ret:list
 # list: {'postIdx':글번호, 'region':지역, 'title':제목, 'writerID':작성자ID, 'writeDate':작성일자}
@@ -170,14 +182,6 @@ def getAllPostList(pageNumber:int):
             ret.append({'postIdx':element['_Post__postIdx'], 'title':element['_Post__title'], 'region':element['_Post__address']['region'],
                         'writerID':element['_Post__writerID'], 'writeDate':element['_Post__writeDate']})
     return ret
-
-# 총 게시글 페이지 수 / ret: int
-def getAllPostPageCount():
-    cnt = col_post.estimated_document_count()
-    if cnt % 20 != 0:
-        return int(cnt / 20) + 1
-    else:
-        return int(cnt / 20)
 
 # 지역별 게시글 목록 불러오기(페이지 번호별 20개) / ret:list
 # list 형태는 getAllPostList와 같음
@@ -214,25 +218,35 @@ def getUserPostList(postNumList:list):
     return ret
 
 ##### Method(app.py) #####
-# 의뢰 게시판 글 목록(지역설정X) 가져오기 >> getAllPostList(pageNumber:int)
 # 의뢰 게시판 페이지 수 >> getAllPostPageCount()
+# 의뢰 게시판 글 목록(지역설정X) 가져오기 >> getAllPostList(pageNumber:int)
 # 의뢰 게시판 글 목록(지역설정O) 가져오기 >> getRegionPostList(pageNumber:int, region:str)
 # 사용자 게시판 작성 글 목록 가져오기 >> getUserPostList(postNumList:list)
+# Post 불러오기(1개) >> getPost(postIdx)
 
-# 새로운 글 생성 :: 작성자ID, 제목, 내용, 요청날짜, Address, 보수
-def createPost(writerID:str, title:str, contents:str, reqDate:str, addr:Address, pay:str):
+# 새로운 글 생성 :: 작성자ID, 제목, 내용, 요청날짜, Address, 보수, 연락방법
+def createPost(writerID:str, title:str, contents:str, reqDate:str, addr:Address, pay:str, contact:str):
     writeDate = getNowTime()
     postIdx = getPostNumber()
-    nPost = Post(postIdx, writeDate, writerID, title, contents, reqDate, addr, pay, [])
-    addPost(nPost)
+    nPost = Post(postIdx, writeDate, writerID, title, contents, reqDate, addr, pay, contact, [])
+    DB_addPost(nPost)
 
-# 글 삭제 >> deletePost(postNumber:int)
+    user = DB_getUser(writerID)
+    user.addMyPost(postIdx)
+    DB_updateUser(user)
 
-# 글 수정 :: 글 번호, 제목, 내용, 요청날짜, Address, 보수
-def modifyPost(postIdx:int, title:str, contents:str, reqDate:str, addr:Address, pay:str):
+# 글 삭제 :: 글번호
+def deletePost(postIdx:int):
     post = getPost(postIdx)
-    post.modify(title, contents, reqDate, addr, pay)
-    updatePost(post)
+    DB_deletePost(postIdx)
+    user = DB_getUser(post.getWriterID())
+    user.deleteMyPost(postIdx)
+
+# 글 수정 :: 글 번호, 제목, 내용, 요청날짜, Address, 보수, 연락방법
+def modifyPost(postIdx:int, title:str, contents:str, reqDate:str, addr:Address, pay:str, contact:str):
+    post = getPost(postIdx)
+    post.modify(title, contents, reqDate, addr, pay, contact)
+    DB_updatePost(post)
 
 # 새로운 댓글 생성:: 글번호, 작성자ID, 내용 
 def createComment(postIdx:int, writerID:str, contents:str):
@@ -240,7 +254,7 @@ def createComment(postIdx:int, writerID:str, contents:str):
         commentIdx = post.getCommentCnt() + 1
         writeDate = getNowTime()
         post.addComment(commentIdx, writeDate, writerID, contents)
-        updatePost(post)
+        DB_updatePost(post)
 
 # 댓글 삭제:: 글번호, 댓글번호
 def deleteComment(postIdx:int, commentIdx:int):
@@ -249,7 +263,7 @@ def deleteComment(postIdx:int, commentIdx:int):
             if comment.getCommentIdx() == commentIdx:
                 index = post.commentList.index(comment)
                 post.commentList.pop(index)
-                updatePost(post)
+                DB_updatePost(post)
                 return
 
 # 댓글 수정:: 글번호, 댓글번호, 내용
@@ -259,5 +273,5 @@ def modifyComment(postIdx:int, commentIdx:int, contents:str):
             if comment.getCommentIdx() == commentIdx:
                 index = post.commentList.index(comment)
                 post.commentList[index].modify(contents)
-                updatePost(post)
+                DB_updatePost(post)
                 return
