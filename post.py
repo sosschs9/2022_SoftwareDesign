@@ -2,7 +2,7 @@ import pymongo
 from abc import *
 from basic import *
 
-# app.py 작성시 맨 아래쪽의 Method(UI) 부분 참고
+# app.py 작성시 맨 아래쪽의 Method(app.py) 부분 참고
 # ** MyPost 추가/삭제 등 User와 관련된 부분은 app.py에 작성
 
 # DB 연결
@@ -147,16 +147,16 @@ def getPost(postIdx:int):
     return post
 
 # 게시글 삭제
-def deletePost(postNumber:int):
-    col_post.delete_one({'_Post__postIdx':postNumber})
+def deletePost(postIdx:int):
+    col_post.delete_one({'_Post__postIdx':postIdx})
 
 # 게시글 업데이트
 def updatePost(post:Post):
     deletePost(post.getPostIdx())
     addPost(post)
 
-# 게시글 목록 불러오기(최근 20개) / ret:list
-# list: {'postIdx':글번호, 'title':제목, 'writerID':작성자ID, 'writeDate':작성일자}
+# 게시글 목록 불러오기(페이지 번호별 20개) / ret:list
+# list: {'postIdx':글번호, 'region':지역, 'title':제목, 'writerID':작성자ID, 'writeDate':작성일자}
 def getAllPostList(pageNumber:int):
     maxIdx = pageNumber * 20
     result = col_post.find().sort('_Post__postIdx', -1).limit(maxIdx)
@@ -167,8 +167,32 @@ def getAllPostList(pageNumber:int):
         if cnt <= (pageNumber-1)*20:
             continue
         else:
-            ret.append({'postIdx':element['_Post__postIdx'], 'title':element['_Post__title'],
+            ret.append({'postIdx':element['_Post__postIdx'], 'title':element['_Post__title'], 'region':element['_Post__address']['region'],
                         'writerID':element['_Post__writerID'], 'writeDate':element['_Post__writeDate']})
+    return ret
+
+# 지역별 게시글 목록 불러오기(페이지 번호별 20개) / ret:list
+# list 형태는 getAllPostList와 같음
+def getRegionPostList(pageNumber:int, region:str):
+    maxIdx = pageNumber * 20
+    postIdx = getPostNumber()-1
+
+    ret = []
+    postCnt = 0
+    while postIdx > 0 and len(ret) < 20:
+        element = col_post.find_one({'_Post__postIdx':postIdx})
+        postIdx -= 1
+        if element == None:
+            continue
+        
+        if element['_Post__address']['region'] == region:
+            postCnt +=1
+            if postCnt <= (pageNumber-1)*20:
+                continue
+            else:
+                ret.append({'postIdx':element['_Post__postIdx'], 'title':element['_Post__title'], 'region':element['_Post__address']['region'],
+                        'writerID':element['_Post__writerID'], 'writeDate':element['_Post__writeDate']})
+    
     return ret
 
 # 해당 유저의 게시글 목록 불러오기 / ret: list
@@ -177,16 +201,14 @@ def getUserPostList(postNumList:list):
     ret = []
     for i in postNumList:
         element = col_post.find_one({'_Post__postIdx':i})
-        ret.append({'postIdx':element['_Post__postIdx'], 'title':element['_Post__title'],
+        ret.append({'postIdx':element['_Post__postIdx'], 'title':element['_Post__title'], 'region':element['_Post__address']['region'],
                         'writerID':element['_Post__writerID'], 'writeDate':element['_Post__writeDate']})
     return ret
 
-
-##### Method(App.py) #####
-# 의뢰 게시판 글 목록 가져오기 >> getAllPostList(pageNumber:int)
+##### Method(app.py) #####
+# 의뢰 게시판 글 목록(지역설정X) 가져오기 >> getAllPostList(pageNumber:int)
+# 의뢰 게시판 글 목록(지역설정O) 가져오기 >> getRegionPostList(pageNumber:int, region:str)
 # 사용자 게시판 작성 글 목록 가져오기 >> getUserPostList(postNumList:list)
-
-# 글 불러오기 >> getPost(postIdx:int) ** return:Post
 
 # 새로운 글 생성 :: 작성자ID, 제목, 내용, 요청날짜, Address, 보수
 def createPost(writerID:str, title:str, contents:str, reqDate:str, addr:Address, pay:str):
@@ -197,7 +219,7 @@ def createPost(writerID:str, title:str, contents:str, reqDate:str, addr:Address,
 
 # 글 삭제 >> deletePost(postNumber:int)
 
-# 글 수정 :: 글번호, 제목, 내용, 요청날짜, Address, 보수
+# 글 수정 :: 글 번호, 제목, 내용, 요청날짜, Address, 보수
 def modifyPost(postIdx:int, title:str, contents:str, reqDate:str, addr:Address, pay:str):
     post = getPost(postIdx)
     post.modify(title, contents, reqDate, addr, pay)
