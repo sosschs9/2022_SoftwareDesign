@@ -171,6 +171,14 @@ def getAllPostList(pageNumber:int):
                         'writerID':element['_Post__writerID'], 'writeDate':element['_Post__writeDate']})
     return ret
 
+# 총 게시글 페이지 수 / ret: int
+def getAllPostPageCount():
+    cnt = col_post.estimated_document_count()
+    if cnt % 20 != 0:
+        return int(cnt / 20) + 1
+    else:
+        return int(cnt / 20)
+
 # 지역별 게시글 목록 불러오기(페이지 번호별 20개) / ret:list
 # list 형태는 getAllPostList와 같음
 def getRegionPostList(pageNumber:int, region:str):
@@ -207,6 +215,7 @@ def getUserPostList(postNumList:list):
 
 ##### Method(app.py) #####
 # 의뢰 게시판 글 목록(지역설정X) 가져오기 >> getAllPostList(pageNumber:int)
+# 의뢰 게시판 페이지 수 >> getAllPostPageCount()
 # 의뢰 게시판 글 목록(지역설정O) 가져오기 >> getRegionPostList(pageNumber:int, region:str)
 # 사용자 게시판 작성 글 목록 가져오기 >> getUserPostList(postNumList:list)
 
