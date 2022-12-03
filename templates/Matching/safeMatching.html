@@ -31,9 +31,9 @@
 						<ul>
 							<li><a href="/">홈</a></li>
 							<li><a href="/">마이페이지</a></li>
-							<li><a href="/post_board">의뢰게시판</a></li>
+							<li><a href="/post_board/1">의뢰게시판</a></li>
 							<li><a href="/select_helper">도우미 신청</a></li>
-							<li><a href="/matching_board">도우미 요청 목록</a></li>
+							<li><a href="/matching_board/{{ checkType }}/1">도우미 요청 목록</a></li>
 						</ul>
 					</nav>
                 <!-- Main -->
@@ -48,7 +48,7 @@
 
 									<form method="post" action="/select_helper/safe">
 										<div class="row gtr-uniform">
-                                            <div class="col-6 col-12-xsmall">
+                                            <div class="col-12-xsmall">
                                                 <label style="font-size: 1rem;font-weight: 200;">날짜:
                                                     <input type="date" name="date" id="date" max="2024-12-31" min="2022-11-01" value="2022-11-21"/>
                                                 </label>
@@ -59,7 +59,13 @@
                                                 </label>
 											</div>
                                             <div class="col-6 col-12-xsmall">
-												<input type="text" name="field" id="field" value="" placeholder="점검이 필요한 부분 "/>
+												<select name="category" id="category">
+													<option value="">- 점검이 필요한 부분 -</option>
+													<option value="전기안전">전기안전</option>
+													<option value="가스안전">가스안전</option>
+													<option value="건물안전">건물안전</option>
+													<option value="소방안전">소방안전</option>
+												</select>
 											</div>
 											<div></div>
 											<div class="col-6 col-12-xsmall">

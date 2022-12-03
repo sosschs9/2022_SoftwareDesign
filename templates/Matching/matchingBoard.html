@@ -33,9 +33,9 @@
 						<ul>
 							<li><a href="/">홈</a></li>
 							<li><a href="/">마이페이지</a></li>
-							<li><a href="/post_board">의뢰게시판</a></li>
+							<li><a href="/post_board/1">의뢰게시판</a></li>
 							<li><a href="/select_helper">도우미 신청</a></li>
-							<li><a href="/matching_board">도우미 요청 목록</a></li>
+							<li><a href="/matching_board/{{ checkType }}/1">도우미 요청 목록</a></li>
 						</ul>
 					</nav>
 
@@ -46,62 +46,66 @@
 								<h1>도우미 요청 목록</h1>
 								<p>목록에서 본인의 도우미 유형과 일치하는 요청을 확인하고, 승낙할 수 있습니다. <br/>
 									도우미가 요청을 승낙하면 매칭이 완료되고, 그 이후에 메시지로 상세 내용을 전달드립니다. <br/>
-									 * 해당 페이지는 도우미 전용 페이지입니다. 일반 사용자는 도우미 요청 카테고리를 선택해주세요.
 								</p>
 							</header>
 
                             <!-- Table -->
                             <section>
-                                <div class="table-wrapper" style="margin-top: 5rem;">
+								<div>
+									<ul class="actions">
+										<li><a href="/write_post" class="button primary">게시글 작성하기</a></li>
+									</ul>
+								</div>
+                                <div class="table-wrapper">
                                     <table>
                                         <thead>
                                             <tr>
                                                 <th>No.</th>
                                                 <th>유형</th>
-												<th>지역</th>
-                                                <th>날짜</th>
-												<th>요청 내용</th>
+                                                <th>요청내용</th>
+                                                <th>작성자</th>
+												<th>요청일자</th>
                                             </tr>
                                         </thead>
-                                        <tbody> <!--목록 받아오기-->
-											<tr>
-                                                <td>3</td>
-												<td>안전점검</td>
-												<td>서울</td>
-												<td>2022.11.30</td>
-                                                <td><a href="#">[XX수리/점검] XX 수리하고 점검...</a></td> <!--링크 추가-->
-                                            </tr>
+                                        <tbody> <!-- 매칭신청 목록 받아오기-->
+										{% for matching in page_list %}
                                             <tr>
-                                                <td>2</td>
-												<td>병원동행</td>
-												<td>대구</td>
-												<td>2022.11.30</td>
-                                                <td><a href="#">[병원이름] 정기 검강검진을 가는데...</a></td> <!--링크 추가-->
+                                                <td>{{ matching['matchingIdx'] }}</td>
+												<td>{{matching['helpType'] }}</td>
+                                                <td><a href="/matching/{{ matching['matchingIdx'] }}">{{ matching['title'] }}</a></td> <!--매칭 링크 추가-->
+                                                <td>{{ matching['writerID'] }}</td>
+                                                <td>{{ matching['reqDate'] }}</td>
                                             </tr>
-                                            <tr>
-                                                <td>1</td>
-												<td>심리상담</td>
-												<td>부산</td>
-												<td>2022.11.27</td>
-                                                <td><a href="#">[상담유형] 이유가어쩌구저쩌구...</a></td> <!--링크 추가-->
-                                            </tr>
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <!--필요하면...-->
-                                            </tr>
-                                        </tfoot>
+										{% endfor %}
+										</tbody>
                                     </table>
                                 </div>
-                            </section>
+								<div style="text-align:center;">
+								{% if start - 1 > 0 %}
+									<a href="{{ url_for('post_board', helperType=checkType, page=start-1) }}" class="button">이전</a>
+									{% endif %}
 
-                            <ul class="actions" style="width: 200px; margin-left: auto; margin-right: auto;">
-                                <li><a href="#" class="button">이전</a></li>
-                                <li><a href="#" class="button">다음</a></li>
-                            </ul>
-							<div>
-								<a href="javascript:window.history.back();" class="button" style="float: right;">되돌아가기</a>
-							</div>
+									{% for pageIdx in range(start, end + 1) %}
+									{% if pageIdx > max_page %}
+									{% else %}
+										{% if pageIdx == this_page %}
+										<b class="button primary">{{ pageIdx }}</b>
+										{% else %}
+										<a href="{{ url_for('matching_board', helperType=checkType, page=pageIdx) }}" class="button">{{ pageIdx }}</a>
+										{% endif %}
+
+									{% endif %}
+								{% endfor %}
+
+								{% if end < max_page %}
+								<a href="{{ url_for('matching_board', helperType=checkType, page=end+1) }}" class="button">다음</a>
+								{% endif %}
+
+								</div>
+								<div>
+									<a href="/" class="button" style="float: right;">되돌아가기</a>
+								</div>
+                            </section>
 						</div>
 					</div>
 

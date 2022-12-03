@@ -31,9 +31,9 @@
 						<ul>
 							<li><a href="/">홈</a></li>
 							<li><a href="/">마이페이지</a></li>
-							<li><a href="/post_board">의뢰게시판</a></li>
+							<li><a href="/post_board/1">의뢰게시판</a></li>
 							<li><a href="/select_helper">도우미 신청</a></li>
-							<li><a href="/matching_board">도우미 요청 목록</a></li>
+							<li><a href="/matching_board/{{ checkType }}/1">도우미 요청 목록</a></li>
 						</ul>
 					</nav>
                 <!-- Main -->
@@ -58,7 +58,15 @@
                                                 </label>
 											</div>
                                             <div class="col-6 col-12-xsmall">
-												<input type="text" name="field" id="field" value="" placeholder="상담분야 "/>
+												<select name="category" id="category">
+													<option value="">- 상담분야 -</option>
+													<option value="대인관계">대인관계</option>
+													<option value="스트레스관리">스트레스관리</option>
+													<option value="감정조절">감정조절</option>
+													<option value="중독">중독</option>
+													<option value="가족관계">가족관계</option>
+													<option value="진로">진로</option>
+												</select>
 											</div>
 											<div></div>
 											<div class="col-6 col-12-xsmall">

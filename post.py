@@ -52,39 +52,9 @@ class Post(Writing):
         self.__contact = contact
         self.commentList = commentList
 
-    # Comment Class
-    class Comment(Writing):
-        # 초기화: 댓글번호, 작성시간, 작성자ID, 내용
-        def __init__(self, commentIdx: int, writeDate: str, writerID: str, contents: str):
-            self.__commentIdx = commentIdx
-            self.__writeDate = writeDate
-            self.__writerID = writerID
-            self.__contents = contents
-
-        # 댓글 수정
-        def modify(self, contents: str):
-            self.__contents = contents
-
-        # 댓글 삭제 ** 해당 Post의 commentList에서 삭제해야함 **
-        def delete(self):
-            pass
-
-        # Comment Getter
-        def getCommentIdx(self):
-            return self.__commentIdx
-
-        def getWriteDate(self):
-            return self.__writeDate
-
-        def getWriterID(self):
-            return self.__writerID
-
-        def getContents(self):
-            return self.__contents
-
     # 댓글 추가
     def addComment(self, commentIdx: int, writeDate: str, writerID: str, contents: str):
-        self.commentList.append(Post.Comment(commentIdx, writeDate, writerID, contents))
+        self.commentList.append(Comment(commentIdx, writeDate, writerID, contents))
 
     # 글 수정
     def modify(self, title: str, contents: str, reqDate: str, addr: Address, pay: str, contact: str):
@@ -131,6 +101,37 @@ class Post(Writing):
         return len(self.commentList)
 
 
+# Comment Class
+class Comment(Writing):
+    # 초기화: 댓글번호, 작성시간, 작성자ID, 내용
+    def __init__(self, commentIdx: int, writeDate: str, writerID: str, contents: str):
+        self.__commentIdx = commentIdx
+        self.__writeDate = writeDate
+        self.__writerID = writerID
+        self.__contents = contents
+
+    # 댓글 수정
+    def modify(self, contents: str):
+        self.__contents = contents
+
+    # 댓글 삭제 ** 해당 Post의 commentList에서 삭제해야함 **
+    def delete(self):
+        pass
+
+    # Comment Getter
+    def getCommentIdx(self):
+        return self.__commentIdx
+
+    def getWriteDate(self):
+        return self.__writeDate
+
+    def getWriterID(self):
+        return self.__writerID
+
+    def getContents(self):
+        return self.__contents
+
+
 ##### POST DB #####
 # 새로운 게시글 번호 / ret: int
 def getPostNumber():
@@ -165,7 +166,7 @@ def getPost(postIdx: int):
                 addr, result['_Post__pay'], result['_Post__contact'], [])
 
     for i in result['commentList']:
-        post.addComment(i['_Comment__commentIdx'], i['_Comment__writerID'], i['_Comment__writeDate'],
+        post.addComment(i['_Comment__commentIdx'], i['_Comment__writeDate'], i['_Comment__writerID'],
                         i['_Comment__contents'])
 
     return post
@@ -272,6 +273,7 @@ def deletePost(postIdx: int):
     DB_deletePost(postIdx)
     user = DB_getUser(post.getWriterID())
     user.deleteMyPost(postIdx)
+    DB_updateUser(user)
 
 
 # 글 수정 :: 글 번호, 제목, 내용, 요청날짜, Address, 보수, 연락방법
@@ -288,6 +290,8 @@ def createComment(postIdx: int, writerID: str, contents: str):
     writeDate = getNowTime()
     post.addComment(commentIdx, writeDate, writerID, contents)
     DB_updatePost(post)
+    for i in post.commentList:
+        print(i['_Comment__commentIdx'], i['_Comment__writeDate'], i['_Comment__writerID'])
 
 
 # 댓글 삭제:: 글번호, 댓글번호

@@ -31,49 +31,64 @@
 						<ul>
 							<li><a href="/">홈</a></li>
 							<li><a href="/">마이페이지</a></li>
-							<li><a href="/post_board">의뢰게시판</a></li>
+							<li><a href="/post_board/1">의뢰게시판</a></li>
 							<li><a href="/select_helper">도우미 신청</a></li>
-							<li><a href="/matching_board">도우미 요청 목록</a></li>
+							<li><a href="/matching_board/{{ checkType }}/1">도우미 요청 목록</a></li>
 						</ul>
 					</nav>
                 <!-- Main -->
                     <div id="main">
 						<div class="inner">
-							<!-- Form -->
+							<!-- 게시글 내용 -->
 								<section>
-                                    <h1>{{ matching['title'] }}</h1>
-                                    <p>신청자: {{ matching['writer'] }} 신청일자: {{ matching['creation'] }}</p>
-
-                                    <h2>의뢰 내용</h2>
-                                    <p>{내}</p>
-                                    <hr>
+                                    <h1>{{ helpType }} 도우미 신청내용</h1>
+									<p>신청자: {{ matching.getHelpeeInfo().ID }}</p>
 
 									<div class="row">
 										<div class="col-6 col-12-medium">
-											<h2>위치</h2>
-                                    		<p>어쩌구 저쩌구</p>
-											<hr>
-
-											<h2>연락방법</h2>
-                                    		<p>나는 말하는 감자입니다.</p>
+											<h2>도우미 요청 날짜/시간</h2>
+                                    		<p>{{ matching.getRequestDate() }}</p>
                                     		<hr>
 										</div>
 										<div class="col-6 col-12-medium">
-                                    		<h2>날짜/시간</h2>
-                                    		<p>나는 말하는 감자입니다.</p>
-                                    		<hr>
+											{% if helpType == '병원동행 ' %}
+											<h2>동행사유</h2>
+											<p>{{ matching.getReason() }}</p>
+											<hr>
+											{% endif %}
 
-											<h2>보수</h2>
-                                    		<p>나는 말하는 감자입니다.</p>
-                                    		<hr>
+											{% if helpType == '심리상담 ' %}
+											<h2>상담분야</h2>
+											<p>{{ matching.getCategory() }}</p>
+											<hr>
+											{% endif %}
+
+											{% if helpType == '점검부분 ' %}
+											<h2>점검부분</h2>
+											<p>{{ matching.getCheckPart() }}</p>
+											<hr>
+											{% endif %}
+										</div>
+										<div class="col-12">
+											<h2>장소</h2>
+											{% if helpType == '병원동행 ' %}
+                                    		<p>[출발지]: {{ matching.getAddress().detailAddress }} <br/>
+												[병원위치]: {{ matching.getHospitalLocation().detailAddress }}</p>
+											{% else %}
+											<p>{{ matching.getAddress().detailAddress }}</p>
+											{% endif %}
+											<hr>
 										</div>
 									</div>
 
-
-									<div>
+									<div style="height: 150px; width: auto;">
+										<a href="{{ url_for( 'consent_matching', matchingID=matching.getMatchingIdx() ) }}" class="button primary"
+											onclick="if(!confirm('요청을 승낙하시겠습니까?\n승낙 이후에는 취소가 불가능합니다.')){return false;}
+													alert('매칭이 완료되었습니다.')">매칭 승낙</a>
 										<a href="javascript:window.history.back();" class="button" style="float: right;">되돌아가기</a>
 									</div>
-                                </section>
+
+								</section>
                         </div>
                     </div>
 

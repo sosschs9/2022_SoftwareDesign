@@ -38,7 +38,7 @@
 							<li><a href="/">마이페이지</a></li>
 							<li><a href="/post_board/1">의뢰게시판</a></li>
 							<li><a href="/select_helper">도우미 신청</a></li>
-							<li><a href="/matching_board">도우미 요청 목록</a></li>
+							<li><a href="/matching_board/{{ checkType }}/1">도우미 요청 목록</a></li>
 						</ul>
 					</nav>
 
@@ -78,7 +78,8 @@
 									<span class="image">
 										<img src="../static/images/pic03.jpg" alt="" />
 									</span>
-									<a href="/matching_board">
+
+									<a href="/matching_board/{{ checkType }}/1">
 										<h2>도우미 요청 목록</h2>
 										<div class="content">
 											<p>도우미 요청 목록을 확인하고 원하는 매칭을 진행할 수 있습니다. <br/> * 해당 페이지는 도우미 전용 페이지입니다. 일반 사용자는 도우미 요청 카테고리를 선택해주세요. </p>
@@ -120,6 +121,12 @@
 			<script src="../static/assets/js/breakpoints.min.js"></script>
 			<script src="../static/assets/js/util.js"></script>
 			<script src="../static/assets/js/main.js"></script>
-
+		{% with messages = get_flashed_messages(category_filter=["error"]) %}
+			{% if messages %}
+				<script>
+					alert("{{messages[-1]}}")
+				</script>
+			{% endif %}
+		{% endwith %}
 	</body>
 </html>

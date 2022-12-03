@@ -31,9 +31,9 @@
 						<ul>
 							<li><a href="/">홈</a></li>
 							<li><a href="/">마이페이지</a></li>
-							<li><a href="/post_board">의뢰게시판</a></li>
+							<li><a href="/post_board/1">의뢰게시판</a></li>
 							<li><a href="/select_helper">도우미 신청</a></li>
-							<li><a href="/matching_board">도우미 요청 목록</a></li>
+							<li><a href="/matching_board/{{ checkType }}/1">도우미 요청 목록</a></li>
 						</ul>
 					</nav>
                 <!-- Main -->
@@ -54,6 +54,9 @@
                                                 <label style="font-size: 1rem;font-weight: 200;">출발 시간:
                                                     <input type="time" name="time" id="time" value=""/>
                                                 </label>
+											</div>
+											<div class="col-6 col-12">
+												<input type="text" name="address" id="address" value="" placeholder="출발지 "/>
 											</div>
 											<div class="col-6 col-12-xsmall">
 												<input type="text" name="hospital" id="hospital" value="" placeholder="병원 위치 " readonly/>

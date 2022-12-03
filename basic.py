@@ -1,5 +1,9 @@
-import requests
 import datetime
+
+class HelperType:
+    ACCOMPANY = 1
+    COUNSEL = 2
+    SAFETYCHECK = 4
 
 class UserCommonInfo:
     def __init__(self, id:str, name:str, phoneNumber:str, gender:bool):
@@ -21,3 +25,9 @@ class Address:
 # 현재 시간 > str / ret:str
 def getNowTime():
     return datetime.datetime.now().strftime('%y.%m.%d')
+
+# DB 불러올 때 변환용
+def data_to_UserInfo(result:dict, indexHead:str):
+    return UserCommonInfo(result[indexHead]['ID'], result[indexHead]['NAME'], result[indexHead]['PHONENUMBER'], result[indexHead]['GENDER'])
+def data_to_Address(result:dict, indexHead:str):
+    return Address(result[indexHead]['detailAddress'], result[indexHead]['placeName'], result[indexHead]['region'])

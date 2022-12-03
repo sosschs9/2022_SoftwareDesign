@@ -33,7 +33,7 @@
 							<li><a href="/">마이페이지</a></li>
 							<li><a href="/post_board/1">의뢰게시판</a></li>
 							<li><a href="/select_helper">도우미 신청</a></li>
-							<li><a href="/matching_board">도우미 요청 목록</a></li>
+							<li><a href="/matching_board/{{ checkType }}/1">도우미 요청 목록</a></li>
 						</ul>
 					</nav>
                 <!-- Main -->
@@ -88,12 +88,14 @@
 										</form>
 									</div>
 
-									<div>
-										{% for comment in post.commentList %}
-											<p style="margin:0px;">{{ comment.getContents() }}</p>
-											<p style="font-size:1rem; color:#787878;">작성자: {{ comment.getWriterID() }} 작성일자: {{ comment.getWriteDate() }}</p>
-										{% endfor %}
-									</div>
+									{% for comment in post.commentList %}
+									 <p style="margin:0px;">{{ comment.getContents() }}</p>
+									 <p style="font-size:1rem; color:#787878;">작성자: {{ comment.getWriterID() }} 작성일자: {{ comment.getWriteDate() }}
+										{% if comment.getWriterID() == userID %}
+										   <a href="{{ url_for( 'delete_comment', post_id=post.getPostIdx(), comment_id=comment.getCommentIdx() ) }}"
+											  onclick="if(!confirm('삭제하시면 복구할 수 없습니다.\n정말로 삭제하시겠습니까?')){return false;}">삭제</a>
+										{% endif %}</p></p>
+                              		{% endfor %}
 
 									<div>
 										<a href="/post_board/1" class="button" style="float: right;">되돌아가기</a>

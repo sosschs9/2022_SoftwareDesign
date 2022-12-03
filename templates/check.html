@@ -4,8 +4,8 @@
 		<title>SoftwareDesign_10조</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="../static/assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="../static/assets/css/noscript.css" /></noscript>
+		<link rel="stylesheet" href="../../static/assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="../../static/assets/css/noscript.css" /></noscript>
 	</head>
 	<body class="is-preload">
 		<!-- Wrapper -->
@@ -31,9 +31,9 @@
 						<ul>
 							<li><a href="/">홈</a></li>
 							<li><a href="/">마이페이지</a></li>
-							<li><a href="/post_board">의뢰게시판</a></li>
+							<li><a href="/post_board/1">의뢰게시판</a></li>
 							<li><a href="/select_helper">도우미 신청</a></li>
-							<li><a href="/matching_board">도우미 요청 목록</a></li>
+							<li><a href="/matching_board/{{ checkType }}/1">도우미 요청 목록</a></li>
 						</ul>
 					</nav>
                 <!-- Main -->
@@ -42,28 +42,26 @@
 							<!-- Form -->
 								<section>
                                     <h1>도우미 신청 확인</h1>
-                                    <p>{{ check['name'] }}님이 신청하신 도우미 요청입니다. <br/>
+                                    <p>{{ check['username'] }}님이 신청하신 도우미 요청입니다. <br/>
 										내용 확인 후, 완료버튼을 누르면 신청이 완료됩니다.
 									</p>
 
-                                    <h2>도우미 유형</h2>
-                                    <p>{{ check['helperType'] }}</p>
-                                    <hr>
-
-                                    <h2>날짜/시간</h2>
-                                    <p>{{ check['date'] }}</p>
-                                    <hr>
-
-                                    <h2>상세 내용</h2>
-									{% detail_item in check['detail'] %}
-                                    <p>{{ detail_item }}</p>
-									{% endfor %}
-                                    <hr>
-
-                                    <ul class="actions">
-                                        <li><a href="{{ url_for('request_matching', ), }}" class="button primary">완료</a></li>
-                                        <li><a href="/" class="button">신청 취소</a></li>
-                                    </ul>
+									<h2>도우미 유형</h2>
+									<p>{{ check['helpType'] }}</p>
+									<hr>
+									<h2>날짜/시간</h2>
+									<p>{{ check['date'] }}</p>
+									<hr>
+									<h2>장소</h2>
+									<p>{{ check['address'] }}</p>
+									<hr>
+									<h2>상세 내용</h2>
+									<p>{{ check['detail'] }}</p>
+									<ul class="actions">
+										<li><a href="{{ url_for('home') }}" onClick="alert('신청이 완료되었습니다.')" class="button primary">완료</a></li>
+										<li><a href="{{ url_for('delete_matching', matchingID=matchingID) }}"
+											   onclick="if(!confirm('취소하시면 복구할 수 없습니다.\n정말로 취소하시겠습니까?')){return false;}" class="button">신청 취소</a></li>
+									</ul>
                                 </section>
                         </div>
                     </div>
@@ -105,11 +103,11 @@
 			});
 			</script>
 			{% endblock %}
-			<script src="../static/assets/js/jquery.min.js"></script>
-			<script src="../static/assets/js/browser.min.js"></script>
-			<script src="../static/assets/js/breakpoints.min.js"></script>
-			<script src="../static/assets/js/util.js"></script>
-			<script src="../static/assets/js/main.js"></script>
+			<script src="../../static/assets/js/jquery.min.js"></script>
+			<script src="../../static/assets/js/browser.min.js"></script>
+			<script src="../../static/assets/js/breakpoints.min.js"></script>
+			<script src="../../static/assets/js/util.js"></script>
+			<script src="../../static/assets/js/main.js"></script>
 
     </body>
 </html>
