@@ -241,6 +241,7 @@ def deletePost(postIdx:int):
     DB_deletePost(postIdx)
     user = DB_getUser(post.getWriterID())
     user.deleteMyPost(postIdx)
+    DB_updateUser(user)
 
 # 글 수정 :: 글 번호, 제목, 내용, 요청날짜, Address, 보수, 연락방법
 def modifyPost(postIdx:int, title:str, contents:str, reqDate:str, addr:Address, pay:str, contact:str):

@@ -163,7 +163,7 @@ def login(inputID, inputPW):
     return False, "등록되지 않은 회원입니다."
   
   user = DB_getUser(inputID)
-  if user.login(inputID) == True:
+  if user.login(inputID, inputPW) == True:
     return True, inputID
   else:
     return False, "아이디, 비밀번호가 일치하지 않습니다."
@@ -185,7 +185,7 @@ def beHelper(userID, helperType):
   if user == None:
     user = col_user.find_one({'Helper_id':userID})
     helper = Helper(user['_Helper__id'], user['_Helper__password'], user['_Helper__name'],
-                    user['_Helper__phoneNumber'], user['_Helper__gender'], user['_Helper__helperType'] & helperType,
+                    user['_Helper__phoneNumber'], user['_Helper__gender'], user['_Helper__helperType'] | helperType,
                     user['_Helper__myPost'], user['_Helper__myRequestHistory'], user['_Helper__MyHelpHistory'])
   else:
     helper = Helper(user['_User__id'], user['_User__password'], user['_User__name'],
