@@ -56,7 +56,7 @@ class User:
   def deleteMyPost(self, postIdx):
     self.__myPost.remove(postIdx)
   def deleteMyRequest(self, requestIdx):
-    self.__myRequestHistory(self, requestIdx)
+    self.__myRequestHistory.remove(requestIdx)
 
 
 class Helper(User):

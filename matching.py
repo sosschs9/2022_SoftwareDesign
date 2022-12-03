@@ -224,6 +224,7 @@ def DB_deleteMatching(matchingIdx:int):
 # 매칭 불러오기 / ret: Matching(Accompany or Cousel or SafetyCheck)
 def getMatching(matchingIdx:int):
     result = col_match.find_one({'matchingIdx':matchingIdx})
+
     if result.get('_Accompany__matchingIdx') != None:
         helpee = data_to_UserInfo(result, '_Accompany__matchedHelpeeInfo')
         if result['_Accompany__matchedHelperInfo'] == None:
