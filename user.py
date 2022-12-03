@@ -193,3 +193,10 @@ def beHelper(userID, helperType):
                     user['_User__myPost'], user['_User__myRequestHistory'], [])
   DB_deleteUser(userID)
   DB_addUser(helper)
+
+# Helper인지확인 / ret:bool
+def isHelper(userID):
+  user = DB_getUser(userID)
+  if type(user) == Helper:
+    return True
+  return False
