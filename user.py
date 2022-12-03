@@ -39,6 +39,10 @@ class User:
     return self.__phoneNumber
   def __getGender(self):
     return self.__gender
+  def __getMyRequest(self):
+    return self.__myRequestHistory
+  def __getMyPost(self):
+    return self.__myPost
   
   def update(self, password, phoneNumber):
     self.__password = password
@@ -92,6 +96,12 @@ class Helper(User):
     return self.__gender
   def getHelperType(self):
     return self.__helperType
+  def __getMyRequest(self):
+    return self.__myRequestHistory
+  def __getMyPost(self):
+    return self.__myPost
+  def __getMyHelp(self):
+    return self.__myHelpHistory
 
   def update(self, password, phoneNumber):
     self.__password = password
