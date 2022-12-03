@@ -271,7 +271,7 @@ def DB_updateMatching(matching):
     DB_addMatching(matching)
 
 # 총 매칭 수 / ret: int
-def getAllPostPageCount(helpType:int):
+def getAllMatchingPageCount(helpType:int):
     result = col_match.find({})
     cnt = 0
     
