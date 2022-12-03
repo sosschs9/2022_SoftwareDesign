@@ -153,7 +153,7 @@ def DB_updateUser(user):
 
 ##### Method(app.py) #####
 # 회원 등록 확인 >> isRegistered(userID:str) / ret: boolean
-# User 불러오기 >> getUser(userID:str) / ret: User
+# User 불러오기 >> DB_getUser(userID:str) / ret: User
 
 # 로그인 :: id, password
 # 성공시 ret: bool(True), str(userID)
