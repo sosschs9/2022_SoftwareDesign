@@ -1,0 +1,155 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>SoftwareDesign_10조</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../../static/assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="../../static/assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+		<!-- Wrapper -->
+			<div id="wrapper">
+				<!-- Header -->
+					<header id="header">
+						<div class="inner">
+							<!-- Logo -->
+								<a href="/" class="logo">
+									<span class="symbol"></span><span class="title">해줌 (help zoom)</span>
+								</a>
+							<!-- Nav -->
+								<nav>
+									<ul>
+										<li><a href="#menu">Menu</a></li>
+									</ul>
+								</nav>
+                        </div>
+                    </header>
+				<!-- Menu -->
+					<nav id="menu">
+						<h2>Menu</h2>
+						<ul>
+							<li><a href="/">홈</a></li>
+							<li><a href="/">마이페이지</a></li>
+							<li><a href="/post_board/1">의뢰게시판</a></li>
+							<li><a href="/select_helper">도우미 신청</a></li>
+							<li><a href="/matching_board/{{ checkType }}/1">도우미 요청 목록</a></li>
+						</ul>
+					</nav>
+                <!-- Main -->
+                    <div id="main">
+						<div class="inner">
+							<!-- Form -->
+								<section>
+                                    <h1>의뢰 게시글 작성</h1>
+                                    <p>의뢰 게시글 작성을 위해서는 아래에 해당하는 내용을 모두 기입하셔야 합니다.</p>
+									<form method="post" action="/write_post">
+										<div class="row gtr-uniform">
+											<div class="col-6 col-12-xsmall">
+												<input type="text" name="title" id="title" value="" placeholder="제목 " required/>
+											</div>
+                                            <div class="col-12">
+												<textarea name="contents" id="contents" placeholder="의뢰 내용 " rows="10"></textarea>
+											</div>
+											<div class="col-6 col-12-xsmall">
+                                                <label for="date" style="font-size: 1rem;font-weight: 200;">날짜:
+                                                    <input type="date" name="date" id="date" max="2024-12-31" min="2022-11-01" value="2022-11-21" required/>
+                                                </label>
+											</div>
+                                            <div class="col-12-xsmall">
+												<input type="text" name="sido" id="sido" placeholder="도/시" readonly required/>
+											</div>
+											<div class="col-12-xsmall">
+												<input type="button" onclick="execDaumPostcode()" value="주소 찾기">
+											</div>
+											<div class="col-6 col-12-xsmall">
+												<input type="text" name="address" id="address" placeholder="주소" readonly required/>
+											</div>
+
+                                            <div class="col-6 col-12">
+												<input type="text" name="detailAddress" id="detailAddress" value="" placeholder="상세주소 " />
+											</div>
+                                            <div class="col-6 col-12-xsmall">
+												<input type="text" name="contact" id="contact" value="" placeholder="연락방법 " required/>
+											</div>
+                                            <div class="col-6 col-12-xsmall">
+												<input type="text" name="pay" id="pay" value="" placeholder="보수 (숫자만 입력)" pattern="[0-9]+" brequired/>
+											</div>
+
+                                            <div class="col-12">
+												<ul class="actions">
+													<li><input type="submit" value="게시글 업로드" class="primary" /></li>
+													<li><input type="reset" value="초기화" /></li>
+												</ul>
+											</div>
+                                        </div>
+                                    </form>
+									<div>
+										<a href="javascript:window.history.back();" class="button" style="float: right;">되돌아가기</a>
+									</div>
+                                </section>
+                        </div>
+                    </div>
+
+                <!-- Footer -->
+					<footer id="footer">
+						<div class="inner">
+                            <section>
+                                <h2>MEMBER</h2>
+                                <ul class="icons">
+                                    <li style="font-size: 1em;"><span class="label">2019113916 김동윤</span></li>
+                                    <li style="font-size: 1em;"><span class="label">2019115356 김주형</span></li>
+                                    <li style="font-size: 1em;"><span class="label">2019114545 장우석</span></li></br>
+									<li style="font-size: 1em;"><span class="label">2021111849 송혜경</span></li>
+                                    <li style="font-size: 1em;"><span class="label">2021111371 제유나</span></li>
+                                </ul>
+                            </section>
+                            <section>
+                                <h2>MORE INFO</h2>
+                                <ul class="icons">
+                                    <li><a href="https://github.com/sosschs9/2022_SoftwareDesign.git"><span class="label">GitHub</span></a></li>
+                                    <li><a href="https://www.notion.so/3e864a7ce7974c50864f1c3edd85c650"><span class="label">Notion</span></a></li>
+                                </ul>
+                            </section>
+						</div>
+					</footer>
+			</div>
+
+		<!-- Scripts -->
+		<script src="../../static/assets/js/jquery.min.js"></script>
+		<script src="../../static/assets/js/browser.min.js"></script>
+		<script src="../../static/assets/js/breakpoints.min.js"></script>
+		<script src="../../static/assets/js/util.js"></script>
+		<script src="../../static/assets/js/main.js"></script>
+
+		<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+		<script>
+        function execDaumPostcode() {
+            // 현재 scroll 위치를 저장해놓는다.
+            var currentScroll = Math.max(document.body.scrollTop, document.documentElement.scrollTop);
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    // 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+                    var addr = ''; // 주소 변수
+                    var sido = ''; // 도/시 변수
+
+                    //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                    if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                        addr = data.roadAddress;
+                    } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                        addr = data.jibunAddress;
+                    }
+                    sido = data.sido;
+
+                    // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                    document.getElementById("address").value = addr;
+                    document.getElementById("sido").value = sido;
+
+                    // 우편번호 찾기 화면이 보이기 이전으로 scroll 위치를 되돌린다.
+                    document.body.scrollTop = currentScroll;
+                }
+            }).open({autoClose: true});
+        }
+    	</script>
+    </body>
+</html>

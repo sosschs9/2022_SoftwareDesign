@@ -1,0 +1,141 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>SoftwareDesign_10조</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../../static/assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="../../static/assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<div class="inner">
+							<!-- Logo -->
+								<a href="/" class="logo">
+									<span class="symbol"></span><span class="title">해줌 (help zoom)</span>
+								</a>
+							<!-- Nav -->
+								<nav>
+									<ul>
+										<li><a href="#menu">Menu</a></li>
+									</ul>
+								</nav>
+						</div>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<h2>Menu</h2>
+						<ul>
+							<li><a href="/">홈</a></li>
+							<li><a href="/">마이페이지</a></li>
+							<li><a href="/post_board/1">의뢰게시판</a></li>
+							<li><a href="/select_helper">도우미 신청</a></li>
+							<li><a href="/matching_board/{{ checkType }}/1">도우미 요청 목록</a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+							<header>
+								<h1>의뢰 게시판</h1>
+								<p>의뢰 게시판을 통해 주변 이웃들에게 도움의 손길을 건내주세요.<br/> * 현재 페이지에서 의뢰 게시글을 작성할 수 있습니다.</p>
+							</header>
+
+                            <!-- Table -->
+                            <section>
+								<div>
+									<ul class="actions">
+										<li><a href="/write_post" class="button primary">게시글 작성하기</a></li>
+									</ul>
+								</div>
+                                <div class="table-wrapper">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>No.</th>
+                                                <th>제목</th>
+                                                <th>작성자</th>
+                                                <th>작성일자</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody> <!--게시글 목록 받아오기-->
+										{% for post in page_list %}
+                                            <tr>
+                                                <td>{{ post['postIdx'] }}</td>
+                                                <td><a href="/post/{{ post['postIdx'] }}">{{ post['title'] }}</a></td> <!--게시글 링크 추가-->
+                                                <td>{{ post['writerID'] }}</td>
+                                                <td>{{ post['writeDate'] }}</td>
+                                            </tr>
+										{% endfor %}
+										</tbody>
+                                    </table>
+                                </div>
+								<div style="text-align:center;">
+								{% if start - 1 > 0 %}
+									<a href="{{ url_for('post_board', page=start-1) }}" class="button">이전</a>
+									{% endif %}
+
+									{% for pageIdx in range(start, end + 1) %}
+									{% if pageIdx > max_page %}
+									{% else %}
+										{% if pageIdx == this_page %}
+										<b class="button primary">{{ pageIdx }}</b>
+										{% else %}
+										<a href="{{ url_for('post_board', page=pageIdx) }}" class="button">{{ pageIdx }}</a>
+										{% endif %}
+
+									{% endif %}
+								{% endfor %}
+
+								{% if end < max_page %}
+								<a href="{{ url_for('post_board', page=end+1) }}" class="button">다음</a>
+								{% endif %}
+
+								</div>
+								<div>
+									<a href="/" class="button" style="float: right;">되돌아가기</a>
+								</div>
+                            </section>
+						</div>
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<div class="inner">
+                            <section>
+                                <h2>MEMBER</h2>
+                                <ul class="icons">
+                                    <li style="font-size: 1em;"><span class="label">2019113916 김동윤</span></li>
+                                    <li style="font-size: 1em;"><span class="label">2019115356 김주형</span></li>
+                                    <li style="font-size: 1em;"><span class="label">2019114545 장우석</span></li></br>
+									<li style="font-size: 1em;"><span class="label">2021111849 송혜경</span></li>
+                                    <li style="font-size: 1em;"><span class="label">2021111371 제유나</span></li>
+                                </ul>
+                            </section>
+                            <section>
+                                <h2>MORE INFO</h2>
+                                <ul class="icons">
+                                    <li><a href="https://github.com/sosschs9/2022_SoftwareDesign.git"><span class="label">GitHub</span></a></li>
+                                    <li><a href="https://www.notion.so/3e864a7ce7974c50864f1c3edd85c650"><span class="label">Notion</span></a></li>
+                                </ul>
+                            </section>
+						</div>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="../../static/assets/js/jquery.min.js"></script>
+			<script src="../../static/assets/js/browser.min.js"></script>
+			<script src="../../static/assets/js/breakpoints.min.js"></script>
+			<script src="../../static/assets/js/util.js"></script>
+			<script src="../../static/assets/js/main.js"></script>
+
+	</body>
+</html>

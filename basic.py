@@ -20,7 +20,7 @@ class Address:
     def __init__(self, detailAddress:str, placeName:str, region:str):
         self.detailAddress = detailAddress
         self.placeName = placeName
-        self.region = region 
+        self.region = region
 
 # 현재 시간 > str / ret:str
 def getNowTime():

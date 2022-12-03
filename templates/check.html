@@ -1,0 +1,113 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>SoftwareDesign_10조</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../../static/assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="../../static/assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+		<!-- Wrapper -->
+			<div id="wrapper">
+				<!-- Header -->
+					<header id="header">
+						<div class="inner">
+							<!-- Logo -->
+								<a href="/" class="logo">
+									<span class="symbol"></span><span class="title">해줌 (help zoom)</span>
+								</a>
+							<!-- Nav -->
+								<nav>
+									<ul>
+										<li><a href="#menu">Menu</a></li>
+									</ul>
+								</nav>
+                        </div>
+                    </header>
+				<!-- Menu -->
+					<nav id="menu">
+						<h2>Menu</h2>
+						<ul>
+							<li><a href="/">홈</a></li>
+							<li><a href="/">마이페이지</a></li>
+							<li><a href="/post_board/1">의뢰게시판</a></li>
+							<li><a href="/select_helper">도우미 신청</a></li>
+							<li><a href="/matching_board/{{ checkType }}/1">도우미 요청 목록</a></li>
+						</ul>
+					</nav>
+                <!-- Main -->
+                    <div id="main">
+						<div class="inner">
+							<!-- Form -->
+								<section>
+                                    <h1>도우미 신청 확인</h1>
+                                    <p>{{ check['username'] }}님이 신청하신 도우미 요청입니다. <br/>
+										내용 확인 후, 완료버튼을 누르면 신청이 완료됩니다.
+									</p>
+
+									<h2>도우미 유형</h2>
+									<p>{{ check['helpType'] }}</p>
+									<hr>
+									<h2>날짜/시간</h2>
+									<p>{{ check['date'] }}</p>
+									<hr>
+									<h2>장소</h2>
+									<p>{{ check['address'] }}</p>
+									<hr>
+									<h2>상세 내용</h2>
+									<p>{{ check['detail'] }}</p>
+									<ul class="actions">
+										<li><a href="{{ url_for('home') }}" onClick="alert('신청이 완료되었습니다.')" class="button primary">완료</a></li>
+										<li><a href="{{ url_for('delete_matching', matchingID=matchingID) }}"
+											   onclick="if(!confirm('취소하시면 복구할 수 없습니다.\n정말로 취소하시겠습니까?')){return false;}" class="button">신청 취소</a></li>
+									</ul>
+                                </section>
+                        </div>
+                    </div>
+
+                <!-- Footer -->
+					<footer id="footer">
+						<div class="inner">
+                            <section>
+                                <h2>MEMBER</h2>
+                                <ul class="icons">
+                                    <li style="font-size: 1em;"><span class="label">2019113916 김동윤</span></li>
+                                    <li style="font-size: 1em;"><span class="label">2019115356 김주형</span></li>
+                                    <li style="font-size: 1em;"><span class="label">2019114545 장우석</span></li></br>
+									<li style="font-size: 1em;"><span class="label">2021111849 송혜경</span></li>
+                                    <li style="font-size: 1em;"><span class="label">2021111371 제유나</span></li>
+                                </ul>
+                            </section>
+                            <section>
+                                <h2>MORE INFO</h2>
+                                <ul class="icons">
+                                    <li><a href="https://github.com/sosschs9/2022_SoftwareDesign.git"><span class="label">GitHub</span></a></li>
+                                    <li><a href="https://www.notion.so/3e864a7ce7974c50864f1c3edd85c650"><span class="label">Notion</span></a></li>
+                                </ul>
+                            </section>
+						</div>
+					</footer>
+			</div>
+
+		<!-- Scripts -->
+			{% block script %}
+			<script type='text/javascript'>
+			const delete_elements = document.getElementsByClassName("delete");
+			Array.from(delete_elements).forEach(function(element) {
+				element.addEventListener('click', function() {
+					if(confirm("정말로 삭제하시겠습니까?")) {
+						location.href = this.dataset.uri;
+					};
+				});
+			});
+			</script>
+			{% endblock %}
+			<script src="../../static/assets/js/jquery.min.js"></script>
+			<script src="../../static/assets/js/browser.min.js"></script>
+			<script src="../../static/assets/js/breakpoints.min.js"></script>
+			<script src="../../static/assets/js/util.js"></script>
+			<script src="../../static/assets/js/main.js"></script>
+
+    </body>
+</html>
