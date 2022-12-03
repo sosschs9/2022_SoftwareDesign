@@ -117,7 +117,7 @@ class Helper(User):
   def deleteMyPost(self, postIdx):
     self.__myPost.remove(postIdx)
   def deleteMyRequest(self, requestIdx):
-    self.__myRequestHistory(self, requestIdx)
+    self.__myRequestHistory.remove(requestIdx)
 
 
 ##### USER DB #####

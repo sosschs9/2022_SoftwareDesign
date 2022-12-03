@@ -223,8 +223,8 @@ def DB_deleteMatching(matchingIdx:int):
 
 # 매칭 불러오기 / ret: Matching(Accompany or Cousel or SafetyCheck)
 def getMatching(matchingIdx:int):
-    result = col_match.find_one({'_Accompany__matchingIdx':matchingIdx})
-    if result != None:
+    result = col_match.find_one({'matchingIdx':matchingIdx})
+    if result.get('_Accompany__matchingIdx') != None:
         helpee = data_to_UserInfo(result, '_Accompany__matchedHelpeeInfo')
         if result['_Accompany__matchedHelperInfo'] == None:
             helper = None
@@ -232,36 +232,35 @@ def getMatching(matchingIdx:int):
             helper = data_to_UserInfo(result, '_Accompany__matchedHelperInfo')
 
         addr = data_to_Address(result, '_Accompany__address')
-        hospitalAddr = data_to_Address(result, '_Accompany_hospitalLocation')
+        hospitalAddr = data_to_Address(result, '_Accompany__hospitalLocation')
 
         matching = Accompany(result['_Accompany__matchingIdx'], result['_Accompany__matchingSuccess'], helpee, helper,
                             result['_Accompany__requestDate'], addr, hospitalAddr, result['_Accompany__reason'])
-    else:
-        result = col_match.find_one({'_Counsel__matchingIdx':matchingIdx})
-        if result != None:
-            helpee = data_to_UserInfo(result, '_Counsel__matchedHelpeeInfo')
-            if result['_Counsel__matchedHelperInfo'] == None:
-                helper = None
-            else:
-                helper = data_to_UserInfo(result, '_Counsel__matchedHelperInfo')
-
-            addr = data_to_Address(result, '_Counsel__address')
-
-            matching = Counsel(result['_Counsel__matchingIdx'], result['_Counsel__matchingSuccess'], helpee, helper,
-                                result['_Counsel__requestDate'], addr, result['_Counsel__category'])
-
+    elif result.get('_Counsel__matchingIdx') != None:
+        helpee = data_to_UserInfo(result, '_Counsel__matchedHelpeeInfo')
+        if result['_Counsel__matchedHelperInfo'] == None:
+            helper = None
         else:
-            result = col_match.find_one({'_SafetyCheck__matchingIdx':matchingIdx})
-            helpee = data_to_UserInfo(result, '_SafetyCheck__matchedHelpeeInfo')
-            if result['_SafetyCheck__matchedHelperInfo'] == None:
-                helper = None
-            else:
-                helper = data_to_UserInfo(result, '_SafetyCheck__matchedHelperInfo')
+            helper = data_to_UserInfo(result, '_Counsel__matchedHelperInfo')
 
-            addr = data_to_Address(result, '_SafetyCheck__address')
+        addr = data_to_Address(result, '_Counsel__address')
 
-            matching = SafetyCheck(result['_SafetyCheck__matchingIdx'], result['_SafetyCheck__matchingSuccess'], helpee, helper,
-                                result['_SafetyCheck__requestDate'], addr, result['_SafetyCheck__checkPart'])
+        matching = Counsel(result['_Counsel__matchingIdx'], result['_Counsel__matchingSuccess'], helpee, helper,
+                            result['_Counsel__requestDate'], addr, result['_Counsel__category'])
+
+    else:
+        print(result)
+        matching = 0
+        helpee = data_to_UserInfo(result, '_SafetyCheck__matchedHelpeeInfo')
+        if result['_SafetyCheck__matchedHelperInfo'] == None:
+            helper = None
+        else:
+            helper = data_to_UserInfo(result, '_SafetyCheck__matchedHelperInfo')
+
+        addr = data_to_Address(result, '_SafetyCheck__address')
+
+        matching = SafetyCheck(result['_SafetyCheck__matchingIdx'], result['_SafetyCheck__matchingSuccess'], helpee, helper,
+                            result['_SafetyCheck__requestDate'], addr, result['_SafetyCheck__checkPart'])
 
     return matching
 
@@ -276,13 +275,13 @@ def getAllMatchingPageCount(helpType:int):
     cnt = 0
     
     for element in result:
-        if ('_Accompany__matchingIdx' in element) and (helpType & HelperType.ACCOMPANY):
+        if (element.get('_Accompany__matchingIdx') != None) and (helpType & HelperType.ACCOMPANY):
             if element['_Accompany__matchingSuccess'] == False:
                 cnt += 1
-        elif ('_Counsel__matchingIdx' in element) and (helpType & HelperType.COUNSEL):
+        elif (element.get('_Counsel__matchingIdx') != None) and (helpType & HelperType.COUNSEL):
             if element['_Counsel__matchingSuccess'] == False:
                 cnt += 1
-        elif ('_SafetyCheck__matchingIdx' in element) and (helpType & HelperType.SAFETYCHECK):
+        elif (element.get('_SafetyCheck__matchingIdx') != None) and (helpType & HelperType.SAFETYCHECK):
             if element['_SafetyCheck__matchingSuccess'] == False:
                 cnt += 1
 
@@ -304,7 +303,7 @@ def getMatchingList(pageNumber:int, helpType:int):
         if element == None:
             continue
             
-        if ('_Accompany__matchingIdx' in element) and (helpType & HelperType.ACCOMPANY):
+        if (element.get('_Accompany__matchingIdx') != None) and (helpType & HelperType.ACCOMPANY):
             if element['_Accompany__matchingSuccess'] == True:
                 continue
             
@@ -318,7 +317,7 @@ def getMatchingList(pageNumber:int, helpType:int):
                 ret.append({'matchingIdx':element['_Accompany__matchingIdx'], 'helpType':'병원동행', 
                             'title':title, 'writerID':element['_Accompany__matchedHelpeeInfo']['ID'], 'reqDate':element['_Accompany__requestDate']})
 
-        elif ('_Counsel__matchingIdx' in element) and (helpType & HelperType.COUNSEL):
+        elif (element.get('_Counsel__matchingIdx') != None) and (helpType & HelperType.COUNSEL):
             if element['_Counsel__matchingSuccess'] == True:
                 continue
 
@@ -332,7 +331,7 @@ def getMatchingList(pageNumber:int, helpType:int):
                 ret.append({'matchingIdx':element['_Counsel__matchingIdx'], 'helpType':'심리상담', 
                             'title':title, 'writerID':element['_Counsel__matchedHelpeeInfo']['ID'], 'reqDate':element['_Counsel__requestDate']})
 
-        elif ('_SafetyCheck__matchingIdx' in element) and (helpType & HelperType.SAFETYCHECK):
+        elif (element.get('_SafetyCheck__matchingIdx') != None) and (helpType & HelperType.SAFETYCHECK):
             if element['_SafetyCheck__matchingSuccess'] == True:
                 continue
 
@@ -354,21 +353,21 @@ def getUserRequestList(postNumList:list):
     ret = []
     for i in postNumList:
         element = col_match.find_one({'_Post__postIdx':i})
-        if '_Accompany__matchingIdx' in element:
+        if element.get('_Accompany__matchingIdx') != None:
             title = '['+element['_Accompany__hospitalLocation']['region']+':'+element['_Accompany__hospitalLocation']['placeName']+'] '+element['_Accompany__reason']
             if(len(title) > 30):
                 title = title[:30] + '...'
             ret.append({'matchingIdx':element['_Accompany__matchingIdx'], 'helpType':'병원동행', 
                         'title':title, 'writerID':element['_Accompany__matchedHelpeeInfo']['ID'],
                         'reqDate':element['_Accompany__requestDate'], 'status':element['_Accompany__matchingSuccess']})
-        elif '_Counsel__matchingIdx' in element:
+        elif element.get('_Counsel__matchingIdx') != None:
             title = '['+element['_Counsel__address']['region']+'] '+element['_Counsel__category']
             if(len(title) > 30):
                 title = title[:30] + '...'
             ret.append({'matchingIdx':element['_Counsel__matchingIdx'], 'helpType':'심리상담', 
                         'title':title, 'writerID':element['_Counsel__matchedHelpeeInfo']['ID'], 
                         'reqDate':element['_Counsel__requestDate'], 'status':element['_Counsel__matchingSuccess']})
-        elif '_SafetyCheck__matchingIdx' in element:
+        elif element.get('_SafetyCheck__matchingIdx') != None:
             title = '['+element['_SafetyCheck__address']['region']+'] '+element['_SafetyCheck__checkPart']
             if(len(title) > 30):
                 title = title[:30] + '...'
@@ -384,19 +383,19 @@ def getUserHelpList(postNumList:list):
     ret = []
     for i in postNumList:
         element = col_match.find_one({'_Post__postIdx':i})
-        if '_Accompany__matchingIdx' in element:
+        if element.get('_Accompany__matchingIdx') != None:
             title = '['+element['_Accompany__hospitalLocation']['region']+':'+element['_Accompany__hospitalLocation']['placeName']+'] '+element['_Accompany__reason']
             if(len(title) > 30):
                 title = title[:30] + '...'
             ret.append({'matchingIdx':element['_Accompany__matchingIdx'], 'helpType':'병원동행', 
                         'title':title, 'writerID':element['_Accompany__matchedHelpeeInfo']['ID'], 'reqDate':element['_Accompany__requestDate']})
-        elif '_Counsel__matchingIdx' in element:
+        elif element.get('_Counsel__matchingIdx') != None:
             title = '['+element['_Counsel__address']['region']+'] '+element['_Counsel__category']
             if(len(title) > 30):
                 title = title[:30] + '...'
             ret.append({'matchingIdx':element['_Counsel__matchingIdx'], 'helpType':'심리상담', 
                         'title':title, 'writerID':element['_Counsel__matchedHelpeeInfo']['ID'], 'reqDate':element['_Counsel__requestDate']})
-        elif '_SafetyCheck__matchingIdx' in element:
+        elif element.get('_SafetyCheck__matchingIdx') != None:
             title = '['+element['_SafetyCheck__address']['region']+'] '+element['_SafetyCheck__checkPart']
             if(len(title) > 30):
                 title = title[:30] + '...'
