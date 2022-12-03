@@ -10,6 +10,7 @@ client = pymongo.MongoClient("mongodb+srv://SD:1234@cluster0.kkapwcd.mongodb.net
 db = client['2022SoftwareDesign']
 col_post = db['Post']
 
+
 ##### PD Layer Class #####
 class Writing(metaclass=ABCMeta):
     @abstractmethod
@@ -17,16 +18,6 @@ class Writing(metaclass=ABCMeta):
         self.__writerID = writerID
         self.__writeDate = writeDate
         self.__contents = contents
-    
-    @abstractmethod
-    def delete(self):
-        pass
-    @abstractmethod
-    def modify(self):
-        pass
-    @abstractmethod
-    def getWriteDate(self):
-        pass
 
     @abstractmethod
     def delete(self):
@@ -43,6 +34,7 @@ class Writing(metaclass=ABCMeta):
     @abstractmethod
     def getWriterID(self):
         pass
+
 
 # Post Class
 class Post(Writing):

@@ -168,6 +168,7 @@ class SafetyCheck(Matching):
         self.__requestDate = reqDate
         self.__address = address
         self.__checkPart = checkPart
+
         self.__matchingSuccess = success
         self.__matchedHelpeeInfo = helpee
         self.__matchedHelperInfo = helper
