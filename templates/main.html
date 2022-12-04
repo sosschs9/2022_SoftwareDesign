@@ -35,10 +35,17 @@
 						<h2>Menu</h2>
 						<ul>
 							<li><a href="/">홈</a></li>
-							<li><a href="/">마이페이지</a></li>
 							<li><a href="/post_board/1">의뢰게시판</a></li>
 							<li><a href="/select_helper">도우미 신청</a></li>
+							{% if checkType %}
 							<li><a href="/matching_board/{{ checkType }}/1">도우미 요청 목록</a></li>
+							{% endif %}
+							{% if isLogin %}
+								<li><a href="/">마이페이지</a></li>
+								<li><a href="/logout">로그아웃</a></li>
+							{% else %}
+								<li><a href="/login_page">로그인</a></li>
+							{% endif %}
 						</ul>
 					</nav>
 
@@ -74,18 +81,55 @@
 										</div>
 									</a>
 								</article>
-								<article class="style3">
-									<span class="image">
-										<img src="../static/images/pic03.jpg" alt="" />
-									</span>
-
-									<a href="/matching_board/{{ checkType }}/1">
-										<h2>도우미 요청 목록</h2>
-										<div class="content">
-											<p>도우미 요청 목록을 확인하고 원하는 매칭을 진행할 수 있습니다. <br/> * 해당 페이지는 도우미 전용 페이지입니다. 일반 사용자는 도우미 요청 카테고리를 선택해주세요. </p>
-										</div>
-									</a>
-								</article>
+								{% if checkType %}
+									<article class="style3">
+										<span class="image">
+											<img src="../static/images/pic03.jpg" alt="" />
+										</span>
+										<a href="/matching_board/{{ checkType }}/1">
+											<h2>도우미 요청 목록</h2>
+											<div class="content">
+												<p>도우미 요청 목록을 확인하고 원하는 매칭을 진행할 수 있습니다. <br/> * 해당 페이지는 도우미 전용 페이지입니다. * </p>
+											</div>
+										</a>
+									</article>
+								{% endif %}
+								{% if isLogin %}
+									<article class="style5">
+										<span class="image">
+											<img src="../static/images/pic05.jpg" alt="" />
+										</span>
+										<a href="/">
+											<h2>마이페이지</h2>
+											<div class="content">
+												<p>...</p>
+											</div>
+										</a>
+									</article>
+									<article class="style6">
+										<span class="image">
+											<img src="../static/images/pic06.jpg" alt="" />
+										</span>
+										<a href="/logout">
+											<h2>로그아웃</h2>
+											<div class="content">
+												<p>...</p>
+											</div>
+										</a>
+									</article>
+								{% else %}
+									<article class="style4">
+										<span class="image">
+											<img src="../static/images/pic04.jpg" alt="" />
+										</span>
+										<a href="/login_page">
+											<h2>로그인</h2>
+											<div class="content">
+												<p>해줌 서비스를 이용하기 위해서 아이디와 비밀번호를 입력해 로그인 해주세요.</p>
+											</div>
+										</a>
+									</article>
+								{% endif %}
 							</section>
 						</div>
 					</div>
@@ -121,12 +165,5 @@
 			<script src="../static/assets/js/breakpoints.min.js"></script>
 			<script src="../static/assets/js/util.js"></script>
 			<script src="../static/assets/js/main.js"></script>
-		{% with messages = get_flashed_messages(category_filter=["error"]) %}
-			{% if messages %}
-				<script>
-					alert("{{messages[-1]}}")
-				</script>
-			{% endif %}
-		{% endwith %}
 	</body>
 </html>

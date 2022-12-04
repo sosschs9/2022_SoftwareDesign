@@ -4,8 +4,8 @@
 		<title>SoftwareDesign_10조</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="../../static/assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="../../static/assets/css/noscript.css" /></noscript>
+		<link rel="stylesheet" href="../static/assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="../static/assets/css/noscript.css" /></noscript>
 	</head>
 	<body class="is-preload">
 		<!-- Wrapper -->
@@ -48,27 +48,27 @@
 						<div class="inner">
 							<!-- Form -->
 								<section>
-                                    <h1>도우미 신청 확인</h1>
-                                    <p>{{ check['username'] }}님이 신청하신 도우미 요청입니다. <br/>
-										내용 확인 후, 완료버튼을 누르면 신청이 완료됩니다.
-									</p>
-
-									<h2>도우미 유형</h2>
-									<p>{{ check['helpType'] }}</p>
-									<hr>
-									<h2>날짜/시간</h2>
-									<p>{{ check['date'] }}</p>
-									<hr>
-									<h2>장소</h2>
-									<p>{{ check['address'] }}</p>
-									<hr>
-									<h2>상세 내용</h2>
-									<p>{{ check['detail'] }}</p>
-									<ul class="actions">
-										<li><a href="{{ url_for('home') }}" onClick="alert('신청이 완료되었습니다.')" class="button primary">완료</a></li>
-										<li><a href="{{ url_for('delete_matching', matchingID=matchingID) }}"
-											   onclick="if(!confirm('취소하시면 복구할 수 없습니다.\n정말로 취소하시겠습니까?')){return false;}" class="button">신청 취소</a></li>
-									</ul>
+                                    <h1>로그인</h1>
+                                    <p>해줌 서비스를 이용하기 위해서 아이디와 비밀번호를 입력해 로그인 해주세요.</p>
+									<form method="post" action="/login_page">
+										<p><u>{{ message }}</u></p>
+										<div class="row gtr-uniform">
+											<div class="col-6 col-12-xsmall">
+												<input type="text" name="userID" id="userID" value="" placeholder="아이디(ID)" required/>
+											</div>
+                                            <div class="col-6 col-12-xsmall">
+												<input type="password" name="userPW" id="userPW" value="" placeholder="비밀번호(Password)" required/>
+											</div>
+                                            <div class="col-12">
+												<ul class="actions">
+													<li><input type="submit" value="로그인" class="primary" /></li>
+												</ul>
+											</div>
+                                        </div>
+                                    </form>
+									<div>
+										<a href="javascript:window.history.back();" class="button" style="float: right;">되돌아가기</a>
+									</div>
                                 </section>
                         </div>
                     </div>
@@ -98,23 +98,19 @@
 			</div>
 
 		<!-- Scripts -->
-			{% block script %}
-			<script type='text/javascript'>
-			const delete_elements = document.getElementsByClassName("delete");
-			Array.from(delete_elements).forEach(function(element) {
-				element.addEventListener('click', function() {
-					if(confirm("정말로 삭제하시겠습니까?")) {
-						location.href = this.dataset.uri;
-					};
-				});
-			});
-			</script>
-			{% endblock %}
-			<script src="../../static/assets/js/jquery.min.js"></script>
-			<script src="../../static/assets/js/browser.min.js"></script>
-			<script src="../../static/assets/js/breakpoints.min.js"></script>
-			<script src="../../static/assets/js/util.js"></script>
-			<script src="../../static/assets/js/main.js"></script>
+		<script src="../static/assets/js/jquery.min.js"></script>
+		<script src="../static/assets/js/browser.min.js"></script>
+		<script src="../static/assets/js/breakpoints.min.js"></script>
+		<script src="../static/assets/js/util.js"></script>
+		<script src="../static/assets/js/main.js"></script>
 
+		<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+		{% with messages = get_flashed_messages(category_filter=["error"]) %}
+			{% if messages %}
+				<script>
+					alert("{{messages[-1]}}")
+				</script>
+			{% endif %}
+		{% endwith %}
     </body>
 </html>

@@ -31,11 +31,18 @@
 					<nav id="menu">
 						<h2>Menu</h2>
 						<ul>
-							<li><a href="main.html">홈</a></li>
-							<li><a href="main.html">마이페이지</a></li>
-							<li><a href="postBoard.html">의뢰게시판</a></li>
-							<li><a href="newMatching.html">도우미 신청</a></li>
-							<li><a href="matchingBoard.html">도우미 요청 목록</a></li>
+							<li><a href="/">홈</a></li>
+							<li><a href="/post_board/1">의뢰게시판</a></li>
+							<li><a href="/select_helper">도우미 신청</a></li>
+							{% if checkType %}
+							<li><a href="/matching_board/{{ checkType }}/1">도우미 요청 목록</a></li>
+							{% endif %}
+							{% if isLogin %}
+								<li><a href="/">마이페이지</a></li>
+								<li><a href="/logout">로그아웃</a></li>
+							{% else %}
+								<li><a href="/login_page">로그인</a></li>
+							{% endif %}
 						</ul>
 					</nav>
 
