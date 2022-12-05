@@ -66,6 +66,8 @@ urllib3==1.26.12
 Werkzeug==2.2.2
 zipp==3.10.0
 ```
+> 실행 방법
+
 **flask run** or **python app.py** 실행 후 
 **'실행url/dev'로 접속** _ex) 127.0.0.1:50000/dev_
 <br><br><br>
@@ -80,6 +82,7 @@ zipp==3.10.0
 |송혜경|Front/Back: Interface 디자인 및 구현, UI Method 구현|
 |장우석|Back: Matching package(Matching class 및 messegeSender) 구현|
 |제유나|Front/Back/DB: DB, Interface 및 UI Method 구현, 병합 및 배포|
+
 <br><br><br>
 
 
