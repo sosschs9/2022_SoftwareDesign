@@ -4,114 +4,106 @@
 		<title>SoftwareDesign_10조</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="../../static/assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="../../static/assets/css/noscript.css" /></noscript>
+		<link rel="stylesheet" href="{{url_for('static', filename='/assets/css/main.css')}}" />
+		<noscript><link rel="stylesheet" href="{{url_for('static', filename='/assets/css/noscript.css')}}" /></noscript>
 	</head>
 	<body class="is-preload">
 		<!-- Wrapper -->
 			<div id="wrapper">
 				<!-- Header -->
-					<header id="header">
-						<div class="inner">
-							<!-- Logo -->
-								<a href="/" class="logo">
-									<span class="symbol"></span><span class="title">해줌 (help zoom)</span>
-								</a>
-							<!-- Nav -->
-								<nav>
-									<ul>
-										<li><a href="#menu">Menu</a></li>
-									</ul>
-								</nav>
-                        </div>
-                    </header>
-				<!-- Menu -->
-					<nav id="menu">
-						<h2>Menu</h2>
-						<ul>
-							<li><a href="/">홈</a></li>
-							<li><a href="/post_board/1">의뢰게시판</a></li>
-							<li><a href="/select_helper">도우미 신청</a></li>
-							{% if checkType %}
-							<li><a href="/matching_board/{{ checkType }}/1">도우미 요청 목록</a></li>
-							{% endif %}
-							{% if isLogin %}
-								<li><a href="/">마이페이지</a></li>
-								<li><a href="/logout">로그아웃</a></li>
-							{% else %}
-								<li><a href="/login_page">로그인</a></li>
-							{% endif %}
-						</ul>
-					</nav>
+				<header id="header">
+					<div class="inner">
+
+						<!-- Logo -->
+							<a href="/dev/{{userKey}}" class="logo">
+								<span class="symbol"></span><span class="title">10조 OPP Service</span>
+							</a>
+
+						<!-- Nav -->
+							<nav>
+								<ul>
+									<li><a href="#menu">Menu</a></li>
+								</ul>
+							</nav>
+
+					</div>
+				</header>
+
+			<!-- Menu -->
+				<nav id="menu">
+					<h2>Menu</h2>
+					<ul>
+						<li><a href="/dev/{{userKey}}">홈</a></li>
+						<li><a href="/dev/post_board/1/{{userKey}}">의뢰게시판</a></li>
+						<li><a href="/dev/select_helper/{{userKey}}">도우미 신청</a></li>
+						{% if checkType %}
+							<li><a href="/dev/matching_board/{{ checkType }}/1/{{userKey}}">도우미 요청 목록</a></li>
+						{% endif %}
+						{% if isLogin %}
+							<li><a href="/dev/{{userKey}}">마이페이지</a></li>
+							<li><a href="/dev/logout">로그아웃</a></li>
+						{% else %}
+							<li><a href="/dev/login_page">로그인</a></li>
+						{% endif %}
+					</ul>
+				</nav>
                 <!-- Main -->
                     <div id="main">
 						<div class="inner">
-							<!-- 게시글 내용 -->
-								<section>
-                                    <h1>{{ post.getTitle() }}</h1>
-                                    <p>작성자: {{ post.getWriterID() }} <br/>
-										작성일자: {{ post.getWriteDate() }}</p>
-
-                                    <h2>의뢰 내용</h2>
-                                    <p>{{ post.getContents() }}</p>
-                                    <hr>
-
+							<section>
+									<h1>{{ post['_Post__title'] }}</h1>
+									<p>작성자: {{ post['_Post__writerID'] }} <br/>
+										작성일자: {{ post['_Post__writeDate'] }}</p>
+									<h2>의뢰 내용</h2>
+									<p>{{ post['_Post__contents'] }}</p>
+									<hr>
 									<div class="row">
 										<div class="col-6 col-12-medium">
-											<h2>위치</h2>
-                                    		<p>{{ post.getAddress().detailAddress }}</p>
+											<h2>날짜</h2>
+											<p>{{ post['_Post__requestDate'] }}</p>
 											<hr>
-
+											<h2>장소</h2>
+											<p>{{ post['_Post__address']['detailAddress'] }}</p>
+											<hr>
 											<h2>연락방법</h2>
-                                    		<p>{{ post.getContact() }}</p>
-                                    		<hr>
-										</div>
-										<div class="col-6 col-12-medium">
-                                    		<h2>날짜</h2>
-                                    		<p>{{ post.getRequestDate() }}</p>
-                                    		<hr>
-
+											<p>{{ post['_Post__contact'] }}</p>
+											<hr>
 											<h2>보수</h2>
-                                    		<p>{{ post.getPay() }}</p>
-                                    		<hr>
+											<p>{{ post['_Post__pay'] }}</p>
+											<hr>
 										</div>
 									</div>
-
 									<div style="height: 150px; width: auto;">
-										{% if post.getWriterID() == userID %}
-										<a href="{{ url_for( 'delete_post', post_id=post.getPostIdx() ) }}" class="button primary"
+										{% if post['_Post__writerID'] == userID %}
+											<a href="/dev/delete_post/{{ post['_Post__postIdx'] }}/{{ userKey }}" class="button primary"
 											onclick="if(!confirm('삭제하시면 복구할 수 없습니다.\n정말로 삭제하시겠습니까?')){return false;}">삭제</a>
-										<a href="{{ url_for( 'modify_post', post_id=post.getPostIdx() )}}" class="button primary">수정</a>
+											<a href="/dev/modify_post/{{ post['_Post__postIdx'] }}/{{ userKey }}" class="button primary">수정</a>
 										{% endif %}
 									</div>
-
-								<!-- 댓글 작성 -->
 									<div>
-										{{ post.getCommentCnt() }}개의 댓글이 있습니다.
-										<form method="post" action="/post/{{ post.getPostIdx() }}">
+										<form method="post" action="/dev/post/{{ post['_Post__postIdx'] }}/{{ userKey }}">
 											<textarea name="comment" id="comment" placeholder="댓글을 작성해주세요" rows="1"
 												style="border:1px solid #aaa; border-radius:4px; padding:8px; margin-bottom:10px;"></textarea>
 											<input type="submit" value="댓글 작성" class="primary" />
 										</form>
 									</div>
-
-									{% for comment in post.commentList %}
-									 <p style="margin:0px;">{{ comment.getContents() }}</p>
-									 <p style="font-size:1rem; color:#787878;">작성자: {{ comment.getWriterID() }} 작성일자: {{ comment.getWriteDate() }}
-										{% if comment.getWriterID() == userID %}
-										   <a href="{{ url_for( 'delete_comment', post_id=post.getPostIdx(), comment_id=comment.getCommentIdx() ) }}"
-											  onclick="if(!confirm('삭제하시면 복구할 수 없습니다.\n정말로 삭제하시겠습니까?')){return false;}">삭제</a>
-										{% endif %}</p></p>
-                              		{% endfor %}
+									{{ len }}개의 댓글이 있습니다.
+									{% for comment in post['commentList'] %}
+										<p style="margin:0px;">{{ comment['_Comment__contents'] }}</p>
+										<p style="font-size:1rem; color:#787878;">작성자: {{ comment['_Comment__writerID'] }} 작성일자: {{ comment['_Comment__writeDate'] }}
+											{% if comment['_Comment__writerID'] == userID %}
+												<a href="/dev/delete_comment/{{post['_Post__postIdx']}}/{{comment['_Comment__commentIdx']}}/{{userKey}}"
+												onclick="if(!confirm('삭제하시면 복구할 수 없습니다.\n정말로 삭제하시겠습니까?')){return false;}">삭제</a>
+											{% endif %}
+										</p></p>
+									{% endfor %}
 
 									<div>
-										<a href="/post_board/1" class="button" style="float: right;">되돌아가기</a>
-									</div>
-
-
-								</section>
-                        </div>
-                    </div>
+										<a href="/dev/post_board/1/{{userKey}}" class="button" style="float: right;">되돌아가기</a>
+									</div> 
+							</section>
+						</div>
+					</div>
 
                 <!-- Footer -->
 					<footer id="footer">
@@ -138,11 +130,11 @@
 			</div>
 
 		<!-- Scripts -->
-			<script src="../assets/js/jquery.min.js"></script>
-			<script src="../assets/js/browser.min.js"></script>
-			<script src="../assets/js/breakpoints.min.js"></script>
-			<script src="../assets/js/util.js"></script>
-			<script src="../assets/js/main.js"></script>
+		<script src="{{ url_for('static', filename='/assets/js/jquery.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='/assets/js/browser.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='/assets/js/breakpoints.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='/assets/js/util.js') }}"></script>
+		<script src="{{ url_for('static', filename='/assets/js/main.js') }}"></script>
 
     </body>
 </html>

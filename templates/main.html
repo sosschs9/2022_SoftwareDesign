@@ -4,8 +4,8 @@
 		<title>SoftwareDesign_10조</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="../static/assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="../static/assets/css/noscript.css" /></noscript>
+		<link rel="stylesheet" href="{{url_for('static', filename='/assets/css/main.css')}}" />
+		<noscript><link rel="stylesheet" href="{{url_for('static', filename='/assets/css/noscript.css')}}" /></noscript>
 	</head>
 	<body class="is-preload">
 		<!-- Wrapper -->
@@ -16,7 +16,7 @@
 						<div class="inner">
 
 							<!-- Logo -->
-								<a href="/" class="logo">
+								<a href="/dev/{{userKey}}" class="logo">
 									<span class="symbol"></span><span class="title">10조 OPP Service</span>
 								</a>
 
@@ -34,17 +34,17 @@
 					<nav id="menu">
 						<h2>Menu</h2>
 						<ul>
-							<li><a href="/">홈</a></li>
-							<li><a href="/post_board/1">의뢰게시판</a></li>
-							<li><a href="/select_helper">도우미 신청</a></li>
+							<li><a href="/dev/{{userKey}}">홈</a></li>
+							<li><a href="/dev/post_board/1/{{userKey}}">의뢰게시판</a></li>
+							<li><a href="/dev/select_helper/{{userKey}}">도우미 신청</a></li>
 							{% if checkType %}
-							<li><a href="/matching_board/{{ checkType }}/1">도우미 요청 목록</a></li>
+							<li><a href="/dev/matching_board/{{ checkType }}/1/{{userKey}}">도우미 요청 목록</a></li>
 							{% endif %}
 							{% if isLogin %}
-								<li><a href="/">마이페이지</a></li>
-								<li><a href="/logout">로그아웃</a></li>
+								<li><a href="/dev/{{userKey}}">마이페이지</a></li>
+								<li><a href="/dev/logout">로그아웃</a></li>
 							{% else %}
-								<li><a href="/login_page">로그인</a></li>
+								<li><a href="/dev/login_page">로그인</a></li>
 							{% endif %}
 						</ul>
 					</nav>
@@ -61,9 +61,9 @@
 							<section class="tiles">
 								<article class="style1">
 									<span class="image">
-										<img src="../static/images/pic01.jpg" alt="" />
+										<img src="{{ url_for('static', filename='/images/pic01.jpg') }}" alt="" />
 									</span>
-									<a href="/post_board/1">
+									<a href="/dev/post_board/1/{{userKey}}">
 										<h2>의뢰 게시판</h2>
 										<div class="content">
 											<p>의뢰 게시판을 통해 주변 이웃들에게 도움의 손길을 건내주세요.<br/> * 해당 페이지에서 의뢰 게시글을 작성할 수 있습니다.</p>
@@ -72,9 +72,9 @@
 								</article>
 								<article class="style2">
 									<span class="image">
-										<img src="../static/images/pic02.jpg" alt="" />
+										<img src="{{ url_for('static', filename='/images/pic02.jpg') }}" alt="" />
 									</span>
-									<a href="/select_helper">
+									<a href="/dev/select_helper/{{userKey}}">
 										<h2>도우미 요청</h2>
 										<div class="content">
 											<p>병원동행, 심리상담, 안전점검이 필요한 경우 해당 페이지에서 전문 도우미를 요청할 수 있습니다.</p>
@@ -84,9 +84,9 @@
 								{% if checkType %}
 									<article class="style3">
 										<span class="image">
-											<img src="../static/images/pic03.jpg" alt="" />
+											<img src="{{ url_for('static', filename='/images/pic03.jpg') }}" alt="" />
 										</span>
-										<a href="/matching_board/{{ checkType }}/1">
+										<a href="/dev/matching_board/{{ checkType }}/1/{{userKey}}">
 											<h2>도우미 요청 목록</h2>
 											<div class="content">
 												<p>도우미 요청 목록을 확인하고 원하는 매칭을 진행할 수 있습니다. <br/> * 해당 페이지는 도우미 전용 페이지입니다. * </p>
@@ -97,32 +97,32 @@
 								{% if isLogin %}
 									<article class="style5">
 										<span class="image">
-											<img src="../static/images/pic05.jpg" alt="" />
+											<img src="{{ url_for('static', filename='/images/pic05.jpg') }}" alt="" />
 										</span>
-										<a href="/">
+										<a href="/dev/{{userKey}}">
 											<h2>마이페이지</h2>
 											<div class="content">
-												<p>...</p>
+												<p>* 준비중입니다. *</p>
 											</div>
 										</a>
 									</article>
 									<article class="style6">
 										<span class="image">
-											<img src="../static/images/pic06.jpg" alt="" />
+											<img src="{{ url_for('static', filename='/images/pic06.jpg') }}" alt="" />
 										</span>
-										<a href="/logout">
+										<a href="/dev/logout">
 											<h2>로그아웃</h2>
 											<div class="content">
-												<p>...</p>
+												<p></p>
 											</div>
 										</a>
 									</article>
 								{% else %}
 									<article class="style4">
 										<span class="image">
-											<img src="../static/images/pic04.jpg" alt="" />
+											<img src="{{ url_for('static', filename='/images/pic04.jpg') }}" alt="" />
 										</span>
-										<a href="/login_page">
+										<a href="/dev/login_page">
 											<h2>로그인</h2>
 											<div class="content">
 												<p>해줌 서비스를 이용하기 위해서 아이디와 비밀번호를 입력해 로그인 해주세요.</p>
@@ -160,10 +160,10 @@
 			</div>
 
 		<!-- Scripts -->
-			<script src="../static/assets/js/jquery.min.js"></script>
-			<script src="../static/assets/js/browser.min.js"></script>
-			<script src="../static/assets/js/breakpoints.min.js"></script>
-			<script src="../static/assets/js/util.js"></script>
-			<script src="../static/assets/js/main.js"></script>
+		<script src="{{ url_for('static', filename='/assets/js/jquery.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='/assets/js/browser.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='/assets/js/breakpoints.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='/assets/js/util.js') }}"></script>
+		<script src="{{ url_for('static', filename='/assets/js/main.js') }}"></script>
 	</body>
 </html>

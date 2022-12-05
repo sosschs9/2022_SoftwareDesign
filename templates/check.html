@@ -4,8 +4,8 @@
 		<title>SoftwareDesign_10조</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="../../static/assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="../../static/assets/css/noscript.css" /></noscript>
+		<link rel="stylesheet" href="{{url_for('static', filename='/assets/css/main.css')}}" />
+		<noscript><link rel="stylesheet" href="{{url_for('static', filename='/assets/css/noscript.css')}}" /></noscript>
 	</head>
 	<body class="is-preload">
 		<!-- Wrapper -->
@@ -14,7 +14,7 @@
 					<header id="header">
 						<div class="inner">
 							<!-- Logo -->
-								<a href="/" class="logo">
+								<a href="/dev/{{userKey}}" class="logo">
 									<span class="symbol"></span><span class="title">해줌 (help zoom)</span>
 								</a>
 							<!-- Nav -->
@@ -29,17 +29,17 @@
 					<nav id="menu">
 						<h2>Menu</h2>
 						<ul>
-							<li><a href="/">홈</a></li>
-							<li><a href="/post_board/1">의뢰게시판</a></li>
-							<li><a href="/select_helper">도우미 신청</a></li>
+							<li><a href="/dev/{{userKey}}">홈</a></li>
+							<li><a href="/dev/post_board/1/{{userKey}}">의뢰게시판</a></li>
+							<li><a href="/dev/select_helper/{{userKey}}">도우미 신청</a></li>
 							{% if checkType %}
-							<li><a href="/matching_board/{{ checkType }}/1">도우미 요청 목록</a></li>
+							<li><a href="/dev/matching_board/{{ checkType }}/1/{{userKey}}">도우미 요청 목록</a></li>
 							{% endif %}
 							{% if isLogin %}
-								<li><a href="/">마이페이지</a></li>
-								<li><a href="/logout">로그아웃</a></li>
+								<li><a href="/dev/{{userKey}}">마이페이지</a></li>
+								<li><a href="/dev/logout">로그아웃</a></li>
 							{% else %}
-								<li><a href="/login_page">로그인</a></li>
+								<li><a href="/dev/login_page">로그인</a></li>
 							{% endif %}
 						</ul>
 					</nav>
@@ -65,8 +65,8 @@
 									<h2>상세 내용</h2>
 									<p>{{ check['detail'] }}</p>
 									<ul class="actions">
-										<li><a href="{{ url_for('home') }}" onClick="alert('신청이 완료되었습니다.')" class="button primary">완료</a></li>
-										<li><a href="{{ url_for('delete_matching', matchingID=matchingID) }}"
+										<li><a href="/dev/{{userKey}}" onClick="alert('신청이 완료되었습니다.')" class="button primary">완료</a></li>
+										<li><a href="/dev/delete_matching/{{matchingID}}/{{userKey}}"
 											   onclick="if(!confirm('취소하시면 복구할 수 없습니다.\n정말로 취소하시겠습니까?')){return false;}" class="button">신청 취소</a></li>
 									</ul>
                                 </section>
@@ -110,11 +110,11 @@
 			});
 			</script>
 			{% endblock %}
-			<script src="../../static/assets/js/jquery.min.js"></script>
-			<script src="../../static/assets/js/browser.min.js"></script>
-			<script src="../../static/assets/js/breakpoints.min.js"></script>
-			<script src="../../static/assets/js/util.js"></script>
-			<script src="../../static/assets/js/main.js"></script>
+			<script src="{{ url_for('static', filename='/assets/js/jquery.min.js') }}"></script>
+			<script src="{{ url_for('static', filename='/assets/js/browser.min.js') }}"></script>
+			<script src="{{ url_for('static', filename='/assets/js/breakpoints.min.js') }}"></script>
+			<script src="{{ url_for('static', filename='/assets/js/util.js') }}"></script>
+			<script src="{{ url_for('static', filename='/assets/js/main.js') }}"></script>
 
     </body>
 </html>

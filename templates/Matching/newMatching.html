@@ -4,45 +4,49 @@
 		<title>SoftwareDesign_10조</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="../../static/assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="../../static/assets/css/noscript.css" /></noscript>
+		<link rel="stylesheet" href="{{url_for('static', filename='/assets/css/main.css')}}" />
+		<noscript><link rel="stylesheet" href="{{url_for('static', filename='/assets/css/noscript.css')}}" /></noscript>
 	</head>
 	<body class="is-preload">
 		<!-- Wrapper -->
 			<div id="wrapper">
 				<!-- Header -->
-					<header id="header">
-						<div class="inner">
-							<!-- Logo -->
-								<a href="/" class="logo">
-									<span class="symbol"></span><span class="title">해줌 (help zoom)</span>
-								</a>
-							<!-- Nav -->
-								<nav>
-									<ul>
-										<li><a href="#menu">Menu</a></li>
-									</ul>
-								</nav>
-                        </div>
-                    </header>
-				<!-- Menu -->
-					<nav id="menu">
-						<h2>Menu</h2>
-						<ul>
-							<li><a href="/">홈</a></li>
-							<li><a href="/post_board/1">의뢰게시판</a></li>
-							<li><a href="/select_helper">도우미 신청</a></li>
-							{% if checkType %}
-							<li><a href="/matching_board/{{ checkType }}/1">도우미 요청 목록</a></li>
-							{% endif %}
-							{% if isLogin %}
-								<li><a href="/">마이페이지</a></li>
-								<li><a href="/logout">로그아웃</a></li>
-							{% else %}
-								<li><a href="/login_page">로그인</a></li>
-							{% endif %}
-						</ul>
-					</nav>
+                <header id="header">
+                    <div class="inner">
+
+                        <!-- Logo -->
+                            <a href="/dev/{{userKey}}" class="logo">
+                                <span class="symbol"></span><span class="title">10조 OPP Service</span>
+                            </a>
+
+                        <!-- Nav -->
+                            <nav>
+                                <ul>
+                                    <li><a href="#menu">Menu</a></li>
+                                </ul>
+                            </nav>
+
+                    </div>
+                </header>
+
+            <!-- Menu -->
+                <nav id="menu">
+                    <h2>Menu</h2>
+                    <ul>
+                        <li><a href="/dev/{{userKey}}">홈</a></li>
+                        <li><a href="/dev/post_board/1/{{userKey}}">의뢰게시판</a></li>
+                        <li><a href="/dev/select_helper/{{userKey}}">도우미 신청</a></li>
+                        {% if checkType %}
+                        <li><a href="/dev/matching_board/{{ checkType }}/1/{{userKey}}">도우미 요청 목록</a></li>
+                        {% endif %}
+                        {% if isLogin %}
+                            <li><a href="/dev/{{userKey}}">마이페이지</a></li>
+                            <li><a href="/dev/logout">로그아웃</a></li>
+                        {% else %}
+                            <li><a href="/dev/login_page">로그인</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
                 <!-- Main -->
                     <div id="main">
 						<div class="inner">
@@ -58,9 +62,9 @@
                             <section class="tiles">
                                 <article class="style1">
                                     <span class="image">
-                                        <img src="../../static/images/pic01.jpg" alt="" />
+                                        <img src="{{ url_for('static', filename='/images/pic01.jpg') }}" alt="" />
                                     </span>
-                                    <a href="/select_helper/accompany">
+                                    <a href="/dev/accompany/{{userKey}}">
                                         <h2 style="font-weight: 300;">병원동행 도우미</h2>
                                         <div class="content">
                                             <p>병원동행 도우미가 필요할 경우 신청을 진행해주세요.</p>
@@ -69,9 +73,9 @@
                                 </article>
                                 <article class="style2">
                                     <span class="image">
-                                        <img src="../../static/images/pic02.jpg" alt="" />
+                                        <img src="{{ url_for('static', filename='/images/pic02.jpg') }}" alt="" />
                                     </span>
-                                    <a href="/select_helper/counsel">
+                                    <a href="/dev/counsel/{{userKey}}">
                                         <h2>심리상담 도우미</h2>
                                         <div class="content">
                                             <p>심리상담 도우미가 필요할 경우 신청을 진행해주세요.</p>
@@ -80,9 +84,9 @@
                                 </article>
                                 <article class="style3">
                                     <span class="image">
-                                        <img src="../../static/images/pic03.jpg" alt="" />
+                                        <img src="{{ url_for('static', filename='/images/pic03.jpg') }}" alt="" />
                                     </span>
-                                    <a href="/select_helper/safe">
+                                    <a href="/dev/safe/{{userKey}}">
                                         <h2>안전점검 도우미</h2>
                                         <div class="content">
                                             <p>안전점검 도우미가 필요할 경우 신청을 진행해주세요.</p>
@@ -91,7 +95,7 @@
                                 </article>
                             </section>
                             <div style="margin-top: 3rem;">
-                                <a href="javascript:window.history.back();" class="button" style="float: right;">되돌아가기</a>
+                                <a href="/dev/{{userKey}}" class="button" style="float: right;">되돌아가기</a>
                             </div>
                         </div>
 
@@ -122,11 +126,11 @@
 			</div>
 
 		<!-- Scripts -->
-			<script src="../../static/assets/js/jquery.min.js"></script>
-			<script src="../../static/assets/js/browser.min.js"></script>
-			<script src="../../static/assets/js/breakpoints.min.js"></script>
-			<script src="../../static/assets/js/util.js"></script>
-			<script src="../../static/assets/js/main.js"></script>
+        <script src="{{ url_for('static', filename='/assets/js/jquery.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='/assets/js/browser.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='/assets/js/breakpoints.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='/assets/js/util.js') }}"></script>
+		<script src="{{ url_for('static', filename='/assets/js/main.js') }}"></script>
 
     </body>
 </html>

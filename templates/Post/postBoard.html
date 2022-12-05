@@ -4,47 +4,50 @@
 		<title>SoftwareDesign_10조</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="../../static/assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="../../static/assets/css/noscript.css" /></noscript>
+		<link rel="stylesheet" href="{{url_for('static', filename='/assets/css/main.css')}}" />
+		<noscript><link rel="stylesheet" href="{{url_for('static', filename='/assets/css/noscript.css')}}" /></noscript>
 	</head>
 	<body class="is-preload">
 		<!-- Wrapper -->
 			<div id="wrapper">
 
 				<!-- Header -->
-					<header id="header">
-						<div class="inner">
-							<!-- Logo -->
-								<a href="/" class="logo">
-									<span class="symbol"></span><span class="title">해줌 (help zoom)</span>
-								</a>
-							<!-- Nav -->
-								<nav>
-									<ul>
-										<li><a href="#menu">Menu</a></li>
-									</ul>
-								</nav>
-						</div>
-					</header>
+				<header id="header">
+					<div class="inner">
 
-				<!-- Menu -->
-					<nav id="menu">
-						<h2>Menu</h2>
-						<ul>
-							<li><a href="/">홈</a></li>
-							<li><a href="/post_board/1">의뢰게시판</a></li>
-							<li><a href="/select_helper">도우미 신청</a></li>
-							{% if checkType %}
-							<li><a href="/matching_board/{{ checkType }}/1">도우미 요청 목록</a></li>
-							{% endif %}
-							{% if isLogin %}
-								<li><a href="/">마이페이지</a></li>
-								<li><a href="/logout">로그아웃</a></li>
-							{% else %}
-								<li><a href="/login_page">로그인</a></li>
-							{% endif %}
-						</ul>
-					</nav>
+						<!-- Logo -->
+							<a href="/dev/{{ userKey }}" class="logo">
+								<span class="symbol"></span><span class="title">10조 OPP Service</span>
+							</a>
+
+						<!-- Nav -->
+							<nav>
+								<ul>
+									<li><a href="#menu">Menu</a></li>
+								</ul>
+							</nav>
+
+					</div>
+				</header>
+
+			<!-- Menu -->
+				<nav id="menu">
+					<h2>Menu</h2>
+					<ul>
+						<li><a href="/dev/{{ userKey }}">홈</a></li>
+						<li><a href="/dev/post_board/1/{{ userKey }}">의뢰게시판</a></li>
+						<li><a href="/dev/select_helper/{{ userKey }}">도우미 신청</a></li>
+						{% if checkType %}
+						<li><a href="/dev/matching_board/{{ checkType }}/1/{{ userKey }}">도우미 요청 목록</a></li>
+						{% endif %}
+						{% if isLogin %}
+							<li><a href="/dev/{{ userKey }}">마이페이지</a></li>
+							<li><a href="/dev/logout">로그아웃</a></li>
+						{% else %}
+							<li><a href="/dev/login_page">로그인</a></li>
+						{% endif %}
+					</ul>
+				</nav>
 
 				<!-- Main -->
 					<div id="main">
@@ -58,24 +61,59 @@
                             <section>
 								<div>
 									<ul class="actions">
-										<li><a href="/write_post" class="button primary">게시글 작성하기</a></li>
+										<li><a href="/dev/write_post/{{ userKey }}" class="button primary">게시글 작성하기</a></li>
 									</ul>
 								</div>
+								<section>
+									<form method="post" action="/dev/post_board/1/{{userKey}}">
+										<div class="row gtr-uniform">
+											<div class="col-6 col-12-xsmall">
+												<select name="demo-category" id="demo-category">
+													<option value="전체">- 전체 -</option>
+													<option value="서울">서울</option>
+													<option value="부산">부산</option>
+													<option value="대구">대구</option>
+													<option value="인천">인천</option>
+													<option value="광주">광주</option>
+													<option value="대전">대전</option>
+													<option value="울산">울산</option>
+													<option value="세종특별자치시">세종특별자치시</option>
+													<option value="경기">경기</option>
+													<option value="강원">강원</option>
+													<option value="충북">충북</option>
+													<option value="충남">충남</option>
+													<option value="전북">전북</option>
+													<option value="전남">전남</option>
+													<option value="경북">경북</option>
+													<option value="경남">경남</option>
+													<option value="제주특별자치도">제주특별자치도</option>
+												</select>
+											</div>
+											<div class="col-6 col-12-xsmall">
+												<ul class="actions">
+													<li><input type="submit" value="검색" class="primary" /></li>
+												</ul>
+											</div>
+										</div>
+									</form>
+								</section>
                                 <div class="table-wrapper">
                                     <table>
                                         <thead>
                                             <tr>
                                                 <th>No.</th>
+												<th>지역</th>
                                                 <th>제목</th>
                                                 <th>작성자</th>
                                                 <th>작성일자</th>
                                             </tr>
                                         </thead>
-                                        <tbody> <!--게시글 목록 받아오기-->
+                                        <tbody> 
 										{% for post in page_list %}
                                             <tr>
                                                 <td>{{ post['postIdx'] }}</td>
-                                                <td><a href="/post/{{ post['postIdx'] }}">{{ post['title'] }}</a></td> <!--게시글 링크 추가-->
+												<td>{{ post['region'] }}</td>
+                                                <td><a href="/dev/post/{{ post['postIdx'] }}/{{ userKey }}">{{ post['title'] }}</a></td>
                                                 <td>{{ post['writerID'] }}</td>
                                                 <td>{{ post['writeDate'] }}</td>
                                             </tr>
@@ -85,7 +123,7 @@
                                 </div>
 								<div style="text-align:center;">
 								{% if start - 1 > 0 %}
-									<a href="{{ url_for('post_board', page=start-1) }}" class="button">이전</a>
+									<a href="{{ url_for('post_board_region', page=start-1, region=region) }}" class="button">이전</a>
 									{% endif %}
 
 									{% for pageIdx in range(start, end + 1) %}
@@ -94,19 +132,19 @@
 										{% if pageIdx == this_page %}
 										<b class="button primary">{{ pageIdx }}</b>
 										{% else %}
-										<a href="{{ url_for('post_board', page=pageIdx) }}" class="button">{{ pageIdx }}</a>
+										<a href="{{ url_for('post_board_region', page=pageIdx, region=region) }}" class="button">{{ pageIdx }}</a>
 										{% endif %}
 
 									{% endif %}
 								{% endfor %}
 
 								{% if end < max_page %}
-								<a href="{{ url_for('post_board', page=end+1) }}" class="button">다음</a>
+								<a href="{{ url_for('post_board_region', page=end+1, region=region) }}" class="button">다음</a>
 								{% endif %}
 
 								</div>
 								<div>
-									<a href="/" class="button" style="float: right;">되돌아가기</a>
+									<a href="/dev/{{userKey}}" class="button" style="float: right;">되돌아가기</a>
 								</div>
                             </section>
 						</div>
@@ -138,11 +176,11 @@
 			</div>
 
 		<!-- Scripts -->
-			<script src="../../static/assets/js/jquery.min.js"></script>
-			<script src="../../static/assets/js/browser.min.js"></script>
-			<script src="../../static/assets/js/breakpoints.min.js"></script>
-			<script src="../../static/assets/js/util.js"></script>
-			<script src="../../static/assets/js/main.js"></script>
+		<script src="{{ url_for('static', filename='/assets/js/jquery.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='/assets/js/browser.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='/assets/js/breakpoints.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='/assets/js/util.js') }}"></script>
+		<script src="{{ url_for('static', filename='/assets/js/main.js') }}"></script>
 
 	</body>
 </html>

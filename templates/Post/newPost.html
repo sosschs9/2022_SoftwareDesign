@@ -4,45 +4,49 @@
 		<title>SoftwareDesign_10조</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="../../static/assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="../../static/assets/css/noscript.css" /></noscript>
+		<link rel="stylesheet" href="{{url_for('static', filename='/assets/css/main.css')}}" />
+		<noscript><link rel="stylesheet" href="{{url_for('static', filename='/assets/css/noscript.css')}}" /></noscript>
 	</head>
 	<body class="is-preload">
 		<!-- Wrapper -->
 			<div id="wrapper">
 				<!-- Header -->
-					<header id="header">
-						<div class="inner">
-							<!-- Logo -->
-								<a href="/" class="logo">
-									<span class="symbol"></span><span class="title">해줌 (help zoom)</span>
-								</a>
-							<!-- Nav -->
-								<nav>
-									<ul>
-										<li><a href="#menu">Menu</a></li>
-									</ul>
-								</nav>
-                        </div>
-                    </header>
-				<!-- Menu -->
-					<nav id="menu">
-						<h2>Menu</h2>
-						<ul>
-							<li><a href="/">홈</a></li>
-							<li><a href="/post_board/1">의뢰게시판</a></li>
-							<li><a href="/select_helper">도우미 신청</a></li>
-							{% if checkType %}
-							<li><a href="/matching_board/{{ checkType }}/1">도우미 요청 목록</a></li>
-							{% endif %}
-							{% if isLogin %}
-								<li><a href="/">마이페이지</a></li>
-								<li><a href="/logout">로그아웃</a></li>
-							{% else %}
-								<li><a href="/login_page">로그인</a></li>
-							{% endif %}
-						</ul>
-					</nav>
+				<header id="header">
+					<div class="inner">
+
+						<!-- Logo -->
+							<a href="/dev/{{userKey}}" class="logo">
+								<span class="symbol"></span><span class="title">10조 OPP Service</span>
+							</a>
+
+						<!-- Nav -->
+							<nav>
+								<ul>
+									<li><a href="#menu">Menu</a></li>
+								</ul>
+							</nav>
+
+					</div>
+				</header>
+
+			<!-- Menu -->
+				<nav id="menu">
+					<h2>Menu</h2>
+					<ul>
+						<li><a href="/dev/{{userKey}}">홈</a></li>
+						<li><a href="/dev/post_board/1/{{userKey}}">의뢰게시판</a></li>
+						<li><a href="/dev/select_helper/{{userKey}}">도우미 신청</a></li>
+						{% if checkType %}
+						<li><a href="/dev/matching_board/{{ checkType }}/1/{{userKey}}">도우미 요청 목록</a></li>
+						{% endif %}
+						{% if isLogin %}
+							<li><a href="/dev/{{userKey}}">마이페이지</a></li>
+							<li><a href="/dev/logout">로그아웃</a></li>
+						{% else %}
+							<li><a href="/dev/login_page">로그인</a></li>
+						{% endif %}
+					</ul>
+				</nav>
                 <!-- Main -->
                     <div id="main">
 						<div class="inner">
@@ -50,7 +54,7 @@
 								<section>
                                     <h1>의뢰 게시글 작성</h1>
                                     <p>의뢰 게시글 작성을 위해서는 아래에 해당하는 내용을 모두 기입하셔야 합니다.</p>
-									<form method="post" action="/write_post">
+									<form method="post" action="/dev/write_post/{{ userKey }}">
 										<div class="row gtr-uniform">
 											<div class="col-6 col-12-xsmall">
 												<input type="text" name="title" id="title" value="" placeholder="제목 " required/>
@@ -123,11 +127,11 @@
 			</div>
 
 		<!-- Scripts -->
-		<script src="../../static/assets/js/jquery.min.js"></script>
-		<script src="../../static/assets/js/browser.min.js"></script>
-		<script src="../../static/assets/js/breakpoints.min.js"></script>
-		<script src="../../static/assets/js/util.js"></script>
-		<script src="../../static/assets/js/main.js"></script>
+		<script src="{{ url_for('static', filename='/assets/js/jquery.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='/assets/js/browser.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='/assets/js/breakpoints.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='/assets/js/util.js') }}"></script>
+		<script src="{{ url_for('static', filename='/assets/js/main.js') }}"></script>
 
 		<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 		<script>
