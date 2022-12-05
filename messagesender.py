@@ -4,7 +4,6 @@ from matching import *
 from datetime import date, timedelta, datetime
 from pytz import timezone
 from twilio.rest import Client
-import twilio.rest.api.v2010.account.sip.domain.auth_types.auth_registrations_mapping
 
 class MessageSender:
     def to_helpee_Form(self, address, date, username, phoneNumber, helptype):
