@@ -1,12 +1,11 @@
 import config
-import matching
+from matching import *
 from datetime import date, timedelta, datetime
 from pytz import timezone
 from twilio.rest import Client
 
-
 class MessageSender:
-    def to_helpee_Form(address, date, username, phoneNumber, helptype):
+    def to_helpee_Form(self, address, date, username, phoneNumber, helptype):
         message = ["[해줌] 도우미 매칭 완료",
                    f"{username}님! 신청하신 도우미 요청에 대해 매칭이 완료되었습니다.\n",
 
@@ -25,7 +24,7 @@ class MessageSender:
                    "0110-1236"]
         return '\n'.join(message)
 
-    def to_helper_Form(address, date, username, phoneNumber, helptype):
+    def to_helper_Form(self, address, date, username, phoneNumber, helptype):
         message = ["[해줌] 도우미 매칭 완료",
                    f"{username}님! 승낙하신 도우미 요청에 대해 매칭이 완료되었습니다.\n",
 
@@ -44,7 +43,7 @@ class MessageSender:
                    "0110-1236"]
         return '\n'.join(message)
 
-    def Appointment_Form(address, date, username, helptype):
+    def Appointment_Form(self, address, date, username, helptype):
         message = ["[해줌] 재신청 권유 알림",
                    f"{username}님! 귀하의 도우미 신청 내역에 대해 재신청 기간으로 확인되어 권유 안내 드립니다.\n",
 
@@ -62,44 +61,39 @@ class MessageSender:
                    "0110-1236"]
         return '\n'.join(message)
 
-    def sendMatching(matching, helperInfo, helpeeInfo, helptype):
+    def sendMatching(self, matching, helperInfo, helpeeInfo, helptype):
         account_sid = config.twilio_account_sid
         auth_token = config.twilio_auth_token
         client = Client(account_sid, auth_token)
-        to_helper_message = MessageSender.to_helper_Form(matching.getAddress(), matching.getDate(), helperInfo[1],
-                                                         helpeeInfo[2], helptype)
-        to_helpee_message = MessageSender.to_helpee_Form(matching.getAddress(), matching.getDate(), helpeeInfo[1],
-                                                         helperInfo[2], helptype)
+        to_helper_message = MessageSender.to_helper_Form(matching.getAddress(), matching.getRequestDate(),
+                                                         helperInfo[1], helpeeInfo[2], helptype)
+        to_helpee_message = MessageSender.to_helpee_Form(matching.getAddress(), matching.getRequestDate(),
+                                                         helpeeInfo[1], helperInfo[2], helptype)
         to_helper = client.messages.create(
-            to='+82' + helperInfo[2],
+            to='01022551875',
             from_=config.twilio_from_number,
             body=to_helper_message
         )
         to_helpee = client.messages.create(
-            to='+82' + helpeeInfo[2],
+            to='01022551875',
             from_=config.twilio_from_number,
             body=to_helpee_message
         )
 
-    def sendAppointment(matching, helperInfo, helpeeInfo, helptype):
+    def sendAppointment(self, matching, helperInfo, helpeeInfo, helptype):
         KST = timezone('Asia/Seoul')
         period = timedelta(weeks=3)
-        if datetime.now(KST).date() == datetime.datetime.strptime(matching.getDate(),
+        if datetime.now(KST).date() == datetime.datetime.strptime(matching.getRequestDate(),
                                                                   '%Y년 %m월 %d일 %H:%M').date() + period:
             account_sid = config.twilio_account_sid
             auth_token = config.twilio_auth_token
             client = Client(account_sid, auth_token)
-            sendForm = Appointment_Form(matching.getAddress(), matching.getDate(), helperInfo[1], helptype)
-            to_helper = client.messages.create(
-                to='+82' + helperInfo[2],
-                from_=config.twilio_from_number,
-                body=to_helper_message
-            )
-            sendForm = Appointment_Form(matching.getAddress(), matching.getDate(), helpeeInfo[1], helptype)
-            to_helpe3 = client.messages.create(
+
+            to_helpee_message = MessageSender.Appointment_Form(matching.getAddress(), matching.getRequestDate(), helpeeInfo[1], helptype)
+            to_helpee = client.messages.create(
                 to='+82' + helpeeInfo[2],
                 from_=config.twilio_from_number,
-                body=to_helper_message
+                body=to_helpee_message
             )
         else:
             pass

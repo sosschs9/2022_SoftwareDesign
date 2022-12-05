@@ -65,7 +65,7 @@ class User:
         self.__myPost.remove(postIdx)
 
     def deleteMyRequest(self, requestIdx):
-        self.__myRequestHistory(self, requestIdx)
+        self.__myRequestHistory.remove(requestIdx)
 
 
 class Helper(User):
@@ -138,7 +138,7 @@ class Helper(User):
         self.__myPost.remove(postIdx)
 
     def deleteMyRequest(self, requestIdx):
-        self.__myRequestHistory(self, requestIdx)
+        self.__myRequestHistory.remove(requestIdx)
 
 
 ##### USER DB #####
@@ -158,13 +158,15 @@ def isRegistered(userID: str):
 # 회원 등록
 def DB_addUser(nUser):
     col_user.insert_one(nUser.__dict__)
-
+    element = col_user.find_one({'_User__id':nUser.getID()})
+    DB_deleteUser(nUser.getID())
+    element['key'] = str(element['_id'])
+    col_user.insert_one(element)
 
 # 회원 삭제
 def DB_deleteUser(userID: str):
     col_user.delete_one({'_User__id': userID})
     col_user.delete_one({'_Helper__id': userID})
-
 
 # 회원 찾기 / ret: User
 def DB_getUser(userID: str):
@@ -181,12 +183,30 @@ def DB_getUser(userID: str):
                     element['_User__myRequestHistory'])
     return user
 
+# key -> userID
+def DB_findUser_key(userKey:str):
+    element = col_user.find_one({'key':userKey})
+    if element.get('_User__id') != None:
+        return element['_User__id']
+    else:
+        return element['_Helper__id']
+
+def DB_getUserKey(userID:str):
+    element = col_user.find_one({'_User__id':userID})
+    if element != None:
+        return element['key']
+    element = col_user.find_one({'_Helper__id':userID})
+    return element['key']
 
 # 회원 정보 수정
 def DB_updateUser(user):
+    element = col_user.find_one({'_User__id': user.getID()})
+    if element == None:
+        element = col_user.find_one({'_Helper__id': user.getID()})
+    nUser = user.__dict__
     DB_deleteUser(user.getID())
-    DB_addUser(user)
-
+    nUser['key'] = element['key']
+    col_user.insert_one(nUser)
 
 ##### Method(app.py) #####
 # 회원 등록 확인 >> isRegistered(userID:str) / ret: boolean
@@ -211,7 +231,6 @@ def createUser(userID, password, name, phoneNumber, gender):
     user = User(userID, password, name, phoneNumber, gender, [], [])
     DB_addUser(user)
 
-
 # 회원정보 수정
 def modifyUser(userID, password, phoneNumber):
     user = DB_getUser(userID)
@@ -231,8 +250,7 @@ def beHelper(userID, helperType):
         helper = Helper(user['_User__id'], user['_User__password'], user['_User__name'],
                         user['_User__phoneNumber'], user['_User__gender'], helperType,
                         user['_User__myPost'], user['_User__myRequestHistory'], [])
-    DB_deleteUser(userID)
-    DB_addUser(helper)
+    DB_updateUser(helper)
 
 
 # Helper인지확인 / ret:bool
