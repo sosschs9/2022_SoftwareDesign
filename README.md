@@ -22,16 +22,18 @@
 ## 3. 활용 기술
 > Object-Oriented Systems Analysis & Designd
 
-usecase diagram, activity diagram, class diagram, Package Diagram, Sequence Diagram
+- usecase diagram, activity diagram, class diagram, Package Diagram, Sequence Diagram
 
 > Front
 
-html, css, JS, 도로명주소 API
+- html, css, JS
+- 도로명주소 API
 
 > Back
 
 - Flask(python) 기반 Serverless 애플리케이션 + AWS lambda(배포)
 - Database: MongoDB(user, post, matching data 저장)
+- Twilio: 메시지 전송 API
 <br><br><br>
 
 
@@ -77,11 +79,11 @@ zipp==3.10.0
 
 |이름|역할|
 |---|------------------------|
-|김동윤|Back: Post package(Writing/Post/Comment class) 구현|
-|김주형|Back: User package(User/Helper class) 구현|
-|송혜경|Front/Back: Interface 디자인 및 구현, UI Method 구현|
-|장우석|Back: Matching package(Matching class 및 messegeSender) 구현|
-|제유나|Front/Back/DB: DB, Interface 및 UI Method 구현, 병합 및 배포|
+|김동윤|__Back__<br>Post package(Writing/Post/Comment class) 구현|
+|김주형|__Back__<br>User package(User/Helper class) 구현|
+|송혜경|__Front/Back__<br>Interface 디자인 및 구현, UI Method 구현|
+|장우석|__Back__<br>Matching package(Matching class 및 messegeSender) 구현|
+|제유나|__Front/Back/DB__<br>DB, Interface 및 UI Method 구현, 병합 및 배포|
 
 <br><br><br>
 
