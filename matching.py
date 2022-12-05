@@ -539,4 +539,3 @@ def requestMatching(matchingIdx: int, helperID: str):
 
     helper.addmyHelp(matchingIdx)
     DB_updateUser(helper)
-    col_match.delete_many({})
