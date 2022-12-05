@@ -40,6 +40,8 @@
 ## 4. 실행방법
 ### 4-1. 배포 페이지 접속
 [해줌 (help zoom)](https://url.kr/uo8rym).
+
+![image](https://user-images.githubusercontent.com/81686317/205733882-183c9390-7bb1-4b58-a957-680482345ea3.png)
 <br><br>
 ### 4-2. 로컬실행
 > 로컬 실행 시 필요한 설정
