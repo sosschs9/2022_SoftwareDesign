@@ -31,8 +31,8 @@ html, css, JS, 도로명주소 API
 
 > Back
 
-Flask(python), MongoDB
-- Data base: user, post, matching data 저장
+- Flask(python) 기반 서버리스 애플리케이션 >> AWS Lambda 배포
+- Database: MongoDB(user, post, matching data 저장)
 
 ---
 
