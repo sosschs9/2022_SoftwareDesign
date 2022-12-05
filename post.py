@@ -209,6 +209,19 @@ def getAllPostList(pageNumber: int):
                         'writerID': element['_Post__writerID'], 'writeDate': element['_Post__writeDate']})
     return ret
 
+# 총 region 페이지 수 / ret: int
+def getRegionPostPageCount(region:str):
+    cnt = 0
+    result = col_post.find({})
+    for element in result:
+        if element['_Post__address']['region'] == region:
+            cnt += 1
+
+    if cnt % 20 != 0:
+        return int(cnt / 20) + 1
+    else:
+        return int(cnt / 20)
+
 
 # 지역별 게시글 목록 불러오기(페이지 번호별 20개) / ret:list
 # list 형태는 getAllPostList와 같음
@@ -290,8 +303,6 @@ def createComment(postIdx: int, writerID: str, contents: str):
     writeDate = getNowTime()
     post.addComment(commentIdx, writeDate, writerID, contents)
     DB_updatePost(post)
-    for i in post.commentList:
-        print(i['_Comment__commentIdx'], i['_Comment__writeDate'], i['_Comment__writerID'])
 
 
 # 댓글 삭제:: 글번호, 댓글번호
