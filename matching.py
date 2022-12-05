@@ -11,6 +11,8 @@ client = pymongo.MongoClient("mongodb+srv://SD:1234@cluster0.kkapwcd.mongodb.net
 db = client['2022SoftwareDesign']
 col_match = db['Matching']
 
+# messageSender 객체 생성
+messageSender = MessageSender()
 
 ##### PD Layer Class #####
 class Matching:
@@ -25,7 +27,7 @@ class Matching:
         self.__matchedHelpeeInfo = helpee
         self.__matchedHelperInfo = helper
 
-    def requireMatching(self):
+    def requireMatching(self, helper: UserCommonInfo):
         pass
 
     def delete():
@@ -69,7 +71,7 @@ class Accompany(Matching):
     def requireMatching(self, helper: UserCommonInfo):
         self.__matchingSuccess = True
         self.__matchedHelperInfo = helper
-        # MessageSender.sendMatching(self, self.__matchedHelperInfo, self.__matchedHelpeeInfo, "병원 동행")
+        messageSender.sendMatching(self, self.getHelperInfo(), self.getHelpeeInfo(), "병원 동행")
 
     def update(self, reqDate: str, address: Address, hospitalLoc: Address, reason: str):
         self.__requestDate = reqDate
@@ -124,7 +126,7 @@ class Counsel(Matching):
     def requireMatching(self, helper: UserCommonInfo):
         self.__matchingSuccess = True
         self.__matchedHelperInfo = helper
-        # MessageSender.sendMatching(self, helper.getUserInfo(), helpee.getUserInfo(), "심리 상담")
+        messageSender.sendMatching(self, self.getHelperInfo(), self.getHelpeeInfo(), "심리 상담")
         # MessageSender.sendAppointment(self, helper.getUserInfo(), helpee.getUserInfo(), "심리 상담")
 
     def update(self, reqDate: str, address: Address, category: str):
@@ -176,7 +178,7 @@ class SafetyCheck(Matching):
     def requireMatching(self, helper: UserCommonInfo):
         self.__matchingSuccess = True
         self.__matchedHelperInfo = helper
-        # MessageSender.sendMatching(self, helper.getUserInfo(), helpee.getUserInfo(), "안전 점검")
+        messageSender.sendMatching(self, self.getHelperInfo(), self.getHelpeeInfo(), "안전 점검")
         # MessageSender.sendAppointment(self, helper.getUserInfo(), helpee.getUserInfo(), "안전 점검")
 
     def update(self, reqDate: str, address: Address, checkPart: str):
@@ -529,7 +531,7 @@ def deleteMatching(matchingIdx: int):
 
 
 # 매칭 하기 :: 매칭 번호, 헬퍼ID
-def requestMatching(matchingIdx: int, helperID: str):
+def consentMatching(matchingIdx: int, helperID: str):
     matching = getMatching(matchingIdx)
     helper = DB_getUser(helperID)
     userInfo = helper.getUserInfo()
@@ -539,4 +541,4 @@ def requestMatching(matchingIdx: int, helperID: str):
 
     helper.addmyHelp(matchingIdx)
     DB_updateUser(helper)
-    col_match.delete_many({})
+

@@ -557,7 +557,7 @@ def consent_matching(matchingID, userKey):
         curUser.isHelper = True
         curUser.checkType = curUser.user.getHelperType()
 
-    requestMatching(matchingID, curUser.userID)
+    consentMatching(matchingID, curUser.userID)
     # 메시지 전송 + 메시지 전송 예약
     return redirect('/dev/'+userKey)
 
