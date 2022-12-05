@@ -71,7 +71,7 @@ class MessageSender:
         to_helpee_message = MessageSender.to_helpee_Form(self, matching.getAddress(), matching.getRequestDate(),
                                                          helpeeInfo.NAME, helperInfo.PHONENUMBER, helptype)
         to_helper = clnt.messages.create(
-            to='+821068991187',
+            to=str(config.twilio_to_number),
             from_=config.twilio_from_number,
             body=to_helper_message
         )
@@ -93,7 +93,7 @@ class MessageSender:
             to_helpee_message = MessageSender.Appointment_Form(self, matching.getAddress(), matching.getRequestDate(),
                                                                helpeeInfo.NAME, helptype)
             to_helpee = client.messages.create(
-                to='821068991187',
+                to=str(config.twilio_to_number),
                 from_=config.twilio_from_number,
                 body=to_helpee_message
             )

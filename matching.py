@@ -541,4 +541,3 @@ def consentMatching(matchingIdx: int, helperID: str):
 
     helper.addmyHelp(matchingIdx)
     DB_updateUser(helper)
-
