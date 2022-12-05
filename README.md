@@ -39,7 +39,7 @@
 
 ## 4. 실행방법
 ### 4-1. 배포 페이지 접속
-<https://soef87br1h.execute-api.ap-northeast-2.amazonaws.com/dev>
+[해줌 (help zoom)](https://url.kr/uo8rym).
 <br><br>
 ### 4-2. 로컬실행
 > 로컬 실행 시 필요한 설정
@@ -86,16 +86,7 @@ zipp==3.10.0
 |제유나|__Front/Back/DB__<br>DB, Interface 및 UI Method 구현, 병합 및 배포|
 
 <br><br><br>
-
-
-## 6. 시연영상
-추가예정
-
-[![동영상 설명]](동영상 링크)
-<br><br><br>
-
-
-## 7. Notion
+## 6. Notion
 노션을 통해 자세한 요구사항 정의문서를 확인하실 수 있습니다.
 
 [10조 노션링크](https://www.notion.so/10-_-3-ddd5a06c975746689816ef191882c024).
