@@ -2,10 +2,13 @@ import requests, sys, os, socket
 from flask import Flask, render_template, request, url_for, redirect, flash, g
 from user import *
 from userInfo_UI import *
+from user_data import *
 from writing import *
 from writing_UI import *
+from writing_data import *
 from matching import *
 from matching_UI import *
+from matching_data import *
 
 class curUser:
     isLogin = False

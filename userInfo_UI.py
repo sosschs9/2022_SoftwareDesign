@@ -1,4 +1,6 @@
 from user import *
+from user_data import *
+from basic import *
 
 ##### Method(app.py) #####
 # 회원 등록 확인 >> isRegistered(userID:str) / ret: boolean
