@@ -111,4 +111,4 @@ helper7: 병원동행 + 심리상담 + 안전점검
 ## 6. Notion
 노션을 통해 자세한 요구사항 정의문서를 확인하실 수 있습니다.
 
-[10조 노션링크](https://www.notion.so/10-_-3-ddd5a06c975746689816ef191882c024).
+[10조 노션링크](https://productive-sink-04a.notion.site/10-_-_-8aab670b594b46c7a837febc942c17a8).
