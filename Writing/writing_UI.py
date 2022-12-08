@@ -1,8 +1,8 @@
-from basic import *
-from writing import *
-from writing_data import *
-from user import *
-from user_data import *
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+from Writing.writing_data import *
+from User.user_data import *
 
 ##### Method(app.py) #####
 # 의뢰 게시판 페이지 수 >> getAllPostPageCount()

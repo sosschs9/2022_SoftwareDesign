@@ -1,5 +1,8 @@
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 import pymongo
-from user import *
+from User.user import *
 from basic import *
 
 # DB 연결

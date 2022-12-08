@@ -1,5 +1,8 @@
-from user import *
-from user_data import *
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+from User.user import *
+from User.user_data import *
 from basic import *
 
 ##### Method(app.py) #####

@@ -1,6 +1,9 @@
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from basic import *
 import pymongo
-from writing import *
+from Writing.writing import *
 
 # DB 연결
 client = pymongo.MongoClient("mongodb+srv://SD:1234@cluster0.kkapwcd.mongodb.net/?retryWrites=true&w=majority")

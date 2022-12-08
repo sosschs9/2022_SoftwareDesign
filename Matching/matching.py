@@ -1,6 +1,7 @@
-from basic import *
-from user import *
-from messagesender import *
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+from Matching.messagesender import *
 
 # app.py 작성시 맨 아래쪽의 Method(app.py) 부분 참고
 # messageSender 부분 수정 필요(requireMatching)

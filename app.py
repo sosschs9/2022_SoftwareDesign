@@ -1,14 +1,12 @@
-import requests, sys, os, socket
-from flask import Flask, render_template, request, url_for, redirect, flash, g
-from user import *
-from userInfo_UI import *
-from user_data import *
-from writing import *
-from writing_UI import *
-from writing_data import *
-from matching import *
-from matching_UI import *
-from matching_data import *
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+from flask import Flask, render_template, request, url_for, redirect, flash
+from User.userInfo_UI import *
+from Writing.writing_UI import *
+from Writing.writing_data import *
+from Matching.matching_UI import *
+from Matching.matching_data import *
 
 class curUser:
     isLogin = False

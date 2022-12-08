@@ -1,6 +1,9 @@
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 import config
 from basic import *
-from matching import *
+from Matching.matching import *
 from datetime import date, timedelta, datetime
 from pytz import timezone
 from twilio.rest import Client

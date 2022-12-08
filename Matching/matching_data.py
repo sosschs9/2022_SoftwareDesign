@@ -1,6 +1,6 @@
 from basic import *
 import pymongo
-from matching import *
+from Matching.matching import *
 
 # DB 연결
 client = pymongo.MongoClient("mongodb+srv://SD:1234@cluster0.kkapwcd.mongodb.net/?retryWrites=true&w=majority")
